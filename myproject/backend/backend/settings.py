@@ -57,6 +57,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = "backend.urls"
@@ -87,6 +88,13 @@ DATABASES = {
     "default": {
         "ENGINE": "djongo",
         "NAME": "ace-your-day-db",
+        "CLIENT": {
+            "name": "ace-your-day-db",
+            "host": os.environ["DB_HOST"],
+            "username": os.environ["DB_USER"],
+            "password": os.environ["DB_PASSWORD"],
+            "authMechanism": "SCRAM-SHA-1",
+        },
     },
 }
 
