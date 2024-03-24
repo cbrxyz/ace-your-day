@@ -17,6 +17,7 @@ export default function Calendar() {
         color: '',
     })
 
+
     const calendarRef = useRef(null)
 
     function handleWeekendsToggle(){
@@ -24,20 +25,33 @@ export default function Calendar() {
     }
 
     function handleDateSelect(selectInfo){
-        let title = prompt("please enter a new title for your event")
+        // let title = prompt("please enter a new title for your event")
+        // let calendarApi = selectInfo.view.calendar;
+
+        // calendarApi.unselect() // clear date selection
+
+        // if(title){
+        //     calendarApi.addEvent({
+        //         id: createEventId(),
+        //         title,
+        //         start: selectInfo.startStr,
+        //         end: selectInfo.endStr,
+        //         allDay: selectInfo.allDay
+        //     })
+        // }
         let calendarApi = selectInfo.view.calendar;
+        calendarApi.unselect();
+        console.log("Start: ", selectInfo.startStr);
+        console.log("End: ", selectInfo.endStr);
+        setFormatData(prevFormData => ({
+            ...formData,
+            start: selectInfo.startStr,
+            end: selectInfo.endStr
+        }));
 
-        calendarApi.unselect() // clear date selection
+        console.log("Form Start: ", formData.start);
+        console.log("Form End: ", formData.end);
 
-        if(title){
-            calendarApi.addEvent({
-                id: createEventId(),
-                title,
-                start: selectInfo.startStr,
-                end: selectInfo.endStr,
-                allDay: selectInfo.allDay
-            })
-        }
     }
 
     function handleEventClick(clickInfo) {
@@ -62,21 +76,26 @@ export default function Calendar() {
         event.preventDefault();
         const {title, start, end, color} = formData;
         if (title && start && end) {
-            const calendarApi = calendarRef.current.getApi()
-            calendarApi.addEvent({
-                id: createEventId(),
-                title,
-                start,
-                end,
-                color
-            });
-
-            setFormatData({
-                title: '',
-                start: '',
-                end: '',
-                color: '',
-            });
+            if(start < end){
+                const calendarApi = calendarRef.current.getApi()
+                calendarApi.addEvent({
+                    id: createEventId(),
+                    title,
+                    start,
+                    end,
+                    color
+                });
+    
+                setFormatData({
+                    title: '',
+                    start: '',
+                    end: '',
+                    color: '',
+                });
+            } else {
+                alert("Start date/time must occur before the end date/time!")
+            }
+            
         } else {
             alert("Please fill out all fields!")
         }
