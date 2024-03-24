@@ -43,10 +43,21 @@ export default function Calendar() {
         calendarApi.unselect();
         console.log("Start: ", selectInfo.startStr);
         console.log("End: ", selectInfo.endStr);
+
+        // const formatStart = formatDate(selectInfo.start, {timeZone: 'UTC', format: 'yyyy-MM-ddTHH:mm:ss'});
+        // const formatEnd = formatDate(selectInfo.end, {timeZone: 'UTC', format: 'yyyy-MM-ddTHH:mm:ss'});
+
+        const start = new Date(selectInfo.startStr);
+        const end = new Date(selectInfo.endStr);
+    
+        const formatStart = `${start.getFullYear()}-${String(start.getMonth() + 1).padStart(2, '0')}-${String(start.getDate()).padStart(2, '0')}T${String(start.getHours()).padStart(2, '0')}:${String(start.getMinutes()).padStart(2, '0')}`;
+        const formatEnd = `${end.getFullYear()}-${String(end.getMonth() + 1).padStart(2, '0')}-${String(end.getDate()).padStart(2, '0')}T${String(end.getHours()).padStart(2, '0')}:${String(end.getMinutes()).padStart(2, '0')}`;
+
+
         setFormatData(prevFormData => ({
             ...formData,
-            start: selectInfo.startStr,
-            end: selectInfo.endStr
+            start: formatStart,
+            end: formatEnd
         }));
 
         console.log("Form Start: ", formData.start);
