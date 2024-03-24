@@ -7,12 +7,15 @@ export const INITIAL_EVENTS = [
     {
         id: createEventId(),
         title: "All Day event",
-        start: todayStr
+        start: todayStr,
+        color: "",
+        textColor: "purple"
     },
     {
         id: createEventId(),
         title: "Timed event",
-        start: todayStr + 'T12:00:00'
+        start: todayStr + 'T12:00:00',
+        textColor: 'purple'
     }
 ]
 
