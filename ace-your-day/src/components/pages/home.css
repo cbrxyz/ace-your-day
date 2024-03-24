@@ -1,3 +1,89 @@
-h1 {
-    color: pink;
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; 
+}
+body{
+    .space-mono-regular {
+        font-family: "Space Mono", monospace;
+        font-weight: 400;
+        font-style: normal;
+    }
+      
+}
+header{
+    height:50px;
+    background: #081F46;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.logo{
+    display: flex;
+    list-style-type: none;
+    align-items: center;
+}
+.logo li a{
+    padding: 0 20px;
+    text-decoration: none;
+    color: white;
+    display: inline-block;
+}
+ul{
+    display: flex;
+    list-style-type: none;
+    align-items: center;
+}
+ul li a{
+    padding: 0 20px;
+    text-decoration: none;
+    color: white;
+    display: inline-block;
+}
+
+main{
+    display: flex;
+    height: calc(100vh - 100px);
+    align-items: center;
+    justify-content: center;
+}
+.hero-img{
+    max-width: 800px;
+    height: 400px;
+}
+.content-left{
+    width: 30%;
+}
+
+main h1{
+    font-size: 54px;
+    color:black;
+    text-transform: uppercase;
+}
+main p{
+    font-size: 14px;
+    font-weight: 400;
+    color: rgb(92, 92, 92);
+    line-height: 31.5px;
+    margin: 30px 0;
+}
+.cta{
+    padding: 15px 30px;
+    background: #FF775D;
+    color: black;
+    outline: none;
+    border: none;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 50px;
+}
+.signin-btn{
+    padding: 15px 30px;
+    background: #FFEEDC;
+    color: black;
+    outline: none;
+    border: none;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 50px;
 }
