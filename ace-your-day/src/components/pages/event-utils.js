@@ -8,7 +8,7 @@ export const INITIAL_EVENTS = [
         id: createEventId(),
         title: "All Day event",
         start: todayStr,
-        color: "",
+        color: "#cf6daa",
         textColor: "purple"
     },
     {
