@@ -1,11 +1,23 @@
 import React, { useState, useRef } from "react";
 import './calendar.css';
+
+//FullCalendar imports
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import {formatDate} from '@fullcalendar/core';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { INITIAL_EVENTS, createEventId } from "./event-utils";
+
+//MUI Imports
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
 
 export default function Calendar() {
     const [weekendsVisible, setWeekendsVisible] = useState(true)
@@ -15,7 +27,12 @@ export default function Calendar() {
         start: '',
         end: '',
         color: '',
+        textColor: ''
     })
+
+    
+    
+
 
 
     const calendarRef = useRef(null)
@@ -25,27 +42,10 @@ export default function Calendar() {
     }
 
     function handleDateSelect(selectInfo){
-        // let title = prompt("please enter a new title for your event")
-        // let calendarApi = selectInfo.view.calendar;
-
-        // calendarApi.unselect() // clear date selection
-
-        // if(title){
-        //     calendarApi.addEvent({
-        //         id: createEventId(),
-        //         title,
-        //         start: selectInfo.startStr,
-        //         end: selectInfo.endStr,
-        //         allDay: selectInfo.allDay
-        //     })
-        // }
         let calendarApi = selectInfo.view.calendar;
         calendarApi.unselect();
         console.log("Start: ", selectInfo.startStr);
         console.log("End: ", selectInfo.endStr);
-
-        // const formatStart = formatDate(selectInfo.start, {timeZone: 'UTC', format: 'yyyy-MM-ddTHH:mm:ss'});
-        // const formatEnd = formatDate(selectInfo.end, {timeZone: 'UTC', format: 'yyyy-MM-ddTHH:mm:ss'});
 
         const start = new Date(selectInfo.startStr);
         const end = new Date(selectInfo.endStr);
@@ -111,6 +111,74 @@ export default function Calendar() {
             alert("Please fill out all fields!")
         }
     }
+
+    // function addEventDialog(){
+    //     const [open, setOpen] = React.useState(false);
+
+    //     const handleClickOpen = () => {
+    //         setOpen(true);
+    //     }
+
+    //     const handleClose = () => {
+    //         setOpen(false);
+    //     }
+
+    //     return (
+    //         <React.Fragment>
+    //             <Button variant="outlined" onClick={handleClickOpen}>
+    //                 Add Event
+    //             </Button>
+    //             <Dialog
+    //                 open={open}
+    //                 onClose={handleClose}
+    //                 PaperProps={{
+    //                     component: 'form',
+    //                     onSubmit: {handleSubmit}
+    //                 }}
+    //             >
+    //                 <DialogTitle>Add Event</DialogTitle>
+    //                 <DialogContent>
+    //                     <DialogContentText>Fill out the fields below to add an event to your calendar!</DialogContentText>
+    //                         <form onSubmit={handleSubmit}>
+    //                         <input
+    //                             type='text'
+    //                             name='title'
+    //                             placeholder="Event Title"
+    //                             value={formData.title}
+    //                             onChange={handleInputChange} 
+    //                         />
+    //                         <input 
+    //                             type="datetime-local"
+    //                             name='start'
+    //                             placeholder="Start Date and Time"
+    //                             value={formData.start}
+    //                             onChange={handleInputChange}
+    //                         />
+    //                         <input 
+    //                             type="datetime-local"
+    //                             name='end'
+    //                             placeholder="End Date and Time"
+    //                             value={formData.end}
+    //                             onChange={handleInputChange}
+    //                         />
+    //                         <input 
+    //                             type="color"
+    //                             name="color"
+    //                             placeholder="Event Color"
+    //                             value={formData.color}
+    //                             onChange={handleInputChange}
+    //                         />
+    //                         {/* <button type='submit'>Add Event</button> */}
+    //                         <Button type="submit">Add</Button>
+    //                     </form>
+    //                 </DialogContent>
+    //                 <DialogActions>
+    //                     <Button onClick={handleClose}>Cancel</Button>
+    //                 </DialogActions>
+    //             </Dialog>
+    //         </React.Fragment>
+    //     )
+    // }
 
     return (
         <div className = 'calendar'>
