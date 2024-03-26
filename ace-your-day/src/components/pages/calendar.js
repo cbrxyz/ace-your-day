@@ -10,13 +10,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import { INITIAL_EVENTS, createEventId } from "./event-utils";
 
 //MUI Imports
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import AddEventDialog from './addEvent'
 
 
 export default function Calendar() {
@@ -31,7 +25,7 @@ export default function Calendar() {
     })
 
     
-    
+    const [showAdd, openShowAdd] = useState(false)
 
 
 
@@ -60,8 +54,7 @@ export default function Calendar() {
             end: formatEnd
         }));
 
-        console.log("Form Start: ", formData.start);
-        console.log("Form End: ", formData.end);
+        openShowAdd(true);
 
     }
 
@@ -103,82 +96,21 @@ export default function Calendar() {
                     end: '',
                     color: '',
                 });
+                openShowAdd(false)
             } else {
+                
                 alert("Start date/time must occur before the end date/time!")
             }
             
         } else {
+            
             alert("Please fill out all fields!")
         }
+
+        
     }
 
-    // function addEventDialog(){
-    //     const [open, setOpen] = React.useState(false);
 
-    //     const handleClickOpen = () => {
-    //         setOpen(true);
-    //     }
-
-    //     const handleClose = () => {
-    //         setOpen(false);
-    //     }
-
-    //     return (
-    //         <React.Fragment>
-    //             <Button variant="outlined" onClick={handleClickOpen}>
-    //                 Add Event
-    //             </Button>
-    //             <Dialog
-    //                 open={open}
-    //                 onClose={handleClose}
-    //                 PaperProps={{
-    //                     component: 'form',
-    //                     onSubmit: {handleSubmit}
-    //                 }}
-    //             >
-    //                 <DialogTitle>Add Event</DialogTitle>
-    //                 <DialogContent>
-    //                     <DialogContentText>Fill out the fields below to add an event to your calendar!</DialogContentText>
-    //                         <form onSubmit={handleSubmit}>
-    //                         <input
-    //                             type='text'
-    //                             name='title'
-    //                             placeholder="Event Title"
-    //                             value={formData.title}
-    //                             onChange={handleInputChange} 
-    //                         />
-    //                         <input 
-    //                             type="datetime-local"
-    //                             name='start'
-    //                             placeholder="Start Date and Time"
-    //                             value={formData.start}
-    //                             onChange={handleInputChange}
-    //                         />
-    //                         <input 
-    //                             type="datetime-local"
-    //                             name='end'
-    //                             placeholder="End Date and Time"
-    //                             value={formData.end}
-    //                             onChange={handleInputChange}
-    //                         />
-    //                         <input 
-    //                             type="color"
-    //                             name="color"
-    //                             placeholder="Event Color"
-    //                             value={formData.color}
-    //                             onChange={handleInputChange}
-    //                         />
-    //                         {/* <button type='submit'>Add Event</button> */}
-    //                         <Button type="submit">Add</Button>
-    //                     </form>
-    //                 </DialogContent>
-    //                 <DialogActions>
-    //                     <Button onClick={handleClose}>Cancel</Button>
-    //                 </DialogActions>
-    //             </Dialog>
-    //         </React.Fragment>
-    //     )
-    // }
 
     return (
         <div className = 'calendar'>
@@ -189,6 +121,7 @@ export default function Calendar() {
                 formData={formData}
                 handleInputChange={handleInputChange}
                 handleSubmit={handleSubmit}
+                showAdd={showAdd}
             />
             <div className='calendar-main'>
                 <FullCalendar
@@ -230,7 +163,7 @@ function renderEventContent(eventInfo){
     )
 }
 
-function Sidebar({weekendsVisible, handleWeekendsToggle, currentEvents, formData, handleInputChange, handleSubmit}) {
+function Sidebar({weekendsVisible, handleWeekendsToggle, currentEvents, formData, handleInputChange, handleSubmit, showAdd}) {
     return (
         <div className="calendar-sidebar">
             <div className="calendar-sidebar-section">
@@ -284,6 +217,15 @@ function Sidebar({weekendsVisible, handleWeekendsToggle, currentEvents, formData
                     />
                     <button type='submit'>Add Event</button>
                 </form>
+            </div>
+            <div className="Calendar-sidebar-section">
+               {/* <Button onClick={openDialog}>Add Event</Button> */}
+               <AddEventDialog
+                    handleSubmit={handleSubmit}
+                    formData={formData}
+                    handleInputChange={handleInputChange}
+                    openDialog={showAdd}
+                />    
             </div>
             <div className="calendar-sidebar-section">
                 <h2>All Events ({currentEvents.length})</h2>
