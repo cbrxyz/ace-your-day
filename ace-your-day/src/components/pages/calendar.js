@@ -96,7 +96,6 @@ export default function Calendar() {
                     end: '',
                     color: '',
                 });
-                openShowAdd(false)
             } else {
                 
                 alert("Start date/time must occur before the end date/time!")
@@ -122,6 +121,7 @@ export default function Calendar() {
                 handleInputChange={handleInputChange}
                 handleSubmit={handleSubmit}
                 showAdd={showAdd}
+                setShowAdd={openShowAdd}
             />
             <div className='calendar-main'>
                 <FullCalendar
@@ -163,7 +163,7 @@ function renderEventContent(eventInfo){
     )
 }
 
-function Sidebar({weekendsVisible, handleWeekendsToggle, currentEvents, formData, handleInputChange, handleSubmit, showAdd}) {
+function Sidebar({weekendsVisible, handleWeekendsToggle, currentEvents, formData, handleInputChange, handleSubmit, showAdd, setShowAdd}) {
     return (
         <div className="calendar-sidebar">
             <div className="calendar-sidebar-section">
@@ -225,6 +225,7 @@ function Sidebar({weekendsVisible, handleWeekendsToggle, currentEvents, formData
                     formData={formData}
                     handleInputChange={handleInputChange}
                     openDialog={showAdd}
+                    setOpenSelect={setShowAdd}
                 />    
             </div>
             <div className="calendar-sidebar-section">
@@ -240,10 +241,22 @@ function Sidebar({weekendsVisible, handleWeekendsToggle, currentEvents, formData
 }
 
 function SidebarEvent({event}) {
-    return (
-        <li key={event.id}>
+    if(new Date(event.start) < new Date()){
+        return (
+            <li key={event.id} style={{textDecoration: 'line-through'}}>
+            
             <b>{formatDate(event.start, {year: 'numeric', month: 'short', day: 'numeric'})}</b>
             <i>&nbsp;&nbsp;&nbsp;&nbsp;{event.title}</i>
-        </li>
-    )
+        </li> 
+        )
+    } else {
+        return (
+            <li key={event.id}>
+                
+                <b>{formatDate(event.start, {year: 'numeric', month: 'short', day: 'numeric'})}</b>
+                <i>&nbsp;&nbsp;&nbsp;&nbsp;{event.title}</i>
+            </li>
+        )   
+    }
+    
 }

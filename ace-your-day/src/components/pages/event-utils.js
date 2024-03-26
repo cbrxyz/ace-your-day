@@ -22,3 +22,12 @@ export const INITIAL_EVENTS = [
 export function createEventId(){
     return String(eventGuid++)
 }
+
+
+const colors = [
+    {category: 'Classes', color: 'blue', text: 'white'},
+    {category: 'Meetings', color: 'purple', text: 'white'},
+    {category: 'Activities', color: '#AEF9c8', text: 'black'}
+];
+
+export default colors;

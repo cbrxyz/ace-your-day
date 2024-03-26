@@ -7,7 +7,10 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-export default function AddEventDialog({handleSubmit, formData, handleInputChange, openDialog}) {
+import colors from './event-utils'
+import { MenuItem, Select } from '@mui/material';
+
+export default function AddEventDialog({handleSubmit, formData, handleInputChange, openDialog, setOpenSelect}) {
     const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -16,6 +19,8 @@ export default function AddEventDialog({handleSubmit, formData, handleInputChang
 
   const handleClose = () => {
     setOpen(false);
+    setOpenSelect(false);
+    
   };
 
   React.useEffect(()=> {
@@ -48,31 +53,34 @@ export default function AddEventDialog({handleSubmit, formData, handleInputChang
                         value={formData.title}
                         onChange={handleInputChange}
                     />
-                    
+                    <br /><br />
+                    Start Date/Time
                     <TextField
                         required
                         margin="dense"
                         id="start"
                         name="start"
-                        label="Start Date and Time"
                         type="datetime-local"
                         fullWidth
                         variant="standard"
                         value={formData.start}
                         onChange={handleInputChange}
                     />
+                    <br /><br />
+                    End Date/Time
                     <TextField
                         required
                         margin="dense"
                         id="end"
                         name="end"
-                        label="End Date and Time"
                         type="datetime-local"
                         fullWidth
                         variant="standard"
                         value={formData.end}
                         onChange={handleInputChange}
                     />
+                    <br /><br />
+                    Event Background Color
                     <TextField
                         margin="dense"
                         id="color"
@@ -84,6 +92,16 @@ export default function AddEventDialog({handleSubmit, formData, handleInputChang
                         value={formData.color}
                         onChange={handleInputChange}
                     />
+                    <Select
+                        labelId = 'event-category-label'
+                        id = 'event-category'
+                        value={formData.color}
+                        label = "Event Category"
+                        onChange = {handleInputChange}
+                    >
+                        <MenuItem value="Event Category"> Event Category </MenuItem>
+                        {colors.map((category) => <MenuItem value={category.color}>{category.category}</MenuItem>)}
+                    </Select>
                     <DialogActions>
                         <Button onClick={handleClose}>Cancel</Button>
                         <Button type="submit" onClick={handleClose}>Add</Button>
