@@ -12,6 +12,9 @@ import { INITIAL_EVENTS, createEventId } from "./event-utils";
 //MUI Imports
 import AddEventDialog from './addEvent'
 
+//Other imports
+import colors from './event-utils'
+
 
 export default function Calendar() {
     const [weekendsVisible, setWeekendsVisible] = useState(true)
@@ -21,7 +24,9 @@ export default function Calendar() {
         start: '',
         end: '',
         color: '',
-        textColor: ''
+        textColor: '',
+        category: '',
+        description: '',
     })
 
     
@@ -70,15 +75,32 @@ export default function Calendar() {
 
     function handleInputChange(event){
         const {name, value} = event.target;
-        setFormatData({
-            ...formData,
-            [name]: value
-        });
+        console.log("Name: " + name + " Value: " + value);
+
+        if(name === 'category'){
+            const bgcolor = colors.find(category => category.category === value);
+            setFormatData(prevFormData => ({
+                ...formData,
+                category: value,
+                color: bgcolor.color,
+                textColor: bgcolor.text
+            }));
+        } else {
+            setFormatData(prevFormData => ({
+                ...formData,
+                [name] : value
+            }));
+        }
+
+        
+
+        
     }
 
     function handleSubmit(event){
         event.preventDefault();
-        const {title, start, end, color} = formData;
+        const {title, start, end, color, textColor} = formData;
+        console.log(formData.color);
         if (title && start && end) {
             if(start < end){
                 const calendarApi = calendarRef.current.getApi()
@@ -87,7 +109,8 @@ export default function Calendar() {
                     title,
                     start,
                     end,
-                    color
+                    color,
+                    textColor
                 });
     
                 setFormatData({
@@ -95,6 +118,9 @@ export default function Calendar() {
                     start: '',
                     end: '',
                     color: '',
+                    textColor: '',
+                    category: '',
+                    description: ''
                 });
             } else {
                 
