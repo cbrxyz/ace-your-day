@@ -1,24 +1,22 @@
 import React from "react";
 import {
   AppBar,
+  makeStyles,
   Toolbar,
   CssBaseline,
   Typography,
-  makeStyles,
   Button
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import logo from "./images/Logo.png";
 
-
 const useStyles = makeStyles((theme) => ({
-  appBar: {
-    backgroundColor: "#081F46",
-  },
   toolbar: {
     display: "flex",
     justifyContent: "space-between",
-    alignItems: "center",
+    alignItems: "auto",
+    margin: "0px",
+    backgroundColor: "#081F46",
   },
   navlinks: {
     marginLeft: "auto",
@@ -28,13 +26,17 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: "1",
     height: "auto",
     cursor: "pointer",
+    marginRight: theme.spacing(45),
+    "& img": {
+      width: "auto", // Make the width of the image responsive
+      height: "auto", // Allow the height to adjust automatically
+      maxHeight: "50px", // Set a maximum height for the logo
+    },
   },
   link: {
     textDecoration: "none",
-    color: "black",
+    color: "#081F46",
     fontSize: "20px",
-    marginLeft: "auto",
-    backgroundColor: "#FFEEDC",
   },
   button: {
     backgroundColor: "#FFEEDC",
@@ -43,11 +45,11 @@ const useStyles = makeStyles((theme) => ({
 
 function Navbar() {
   const classes = useStyles();
-
+  
   return (
-    <AppBar position="static" className={classes.appBar}>
+    <AppBar position="static" className={classes.toolbar}>
       <CssBaseline />
-      <Toolbar className={classes.toolbar}>
+      <Toolbar className="logo">
         <Typography variant="h4" className={classes.logo}>
           <img src={logo} alt="Logo" height="40" />
         </Typography>
@@ -55,11 +57,12 @@ function Navbar() {
           Ace Your Day
         </Typography>
         <div className={classes.buttonWrapper}>
+          {/* Replace this button for Google Log In */}
           <Button
             variant="contained"
             component={Link}
             to="/calendar"
-            className={classes.button}>
+            className="button">
             Log in with Google
           </Button>
         </div>
