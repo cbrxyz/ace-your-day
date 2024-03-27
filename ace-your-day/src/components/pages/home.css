@@ -1,6 +1,6 @@
 *{
     margin: 0;
-    padding: 0;
+    padding: -1000;
     box-sizing: border-box; 
 }
 body{
@@ -11,36 +11,6 @@ body{
     }
       
 }
-header{
-    height:50px;
-    background: #081F46;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-}
-.logo{
-    display: flex;
-    list-style-type: none;
-    align-items: center;
-}
-.logo li a{
-    padding: 0 20px;
-    text-decoration: none;
-    color: white;
-    display: inline-block;
-}
-ul{
-    display: flex;
-    list-style-type: none;
-    align-items: center;
-}
-ul li a{
-    padding: 0 20px;
-    text-decoration: none;
-    color: white;
-    display: inline-block;
-}
-
 main{
     display: flex;
     height: calc(100vh - 100px);
@@ -51,8 +21,9 @@ main{
     max-width: 800px;
     height: 400px;
 }
+
 .content-left{
-    width: 30%;
+    width: 50%;
 }
 
 main h1{
@@ -67,8 +38,16 @@ main p{
     line-height: 31.5px;
     margin: 30px 0;
 }
+.content-left li{
+    list-style-type: none;
+}
+.content-left li a{
+    text-decoration: none;
+    color: black;
+    display: inline-block;
+}
 .cta{
-    padding: 15px 30px;
+    padding: 10px 10px;
     background: #FF775D;
     color: black;
     outline: none;
@@ -78,7 +57,7 @@ main p{
     border-radius: 50px;
 }
 .signin-btn{
-    padding: 15px 30px;
+    padding: 10px 30px;
     background: #FFEEDC;
     color: black;
     outline: none;
