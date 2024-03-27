@@ -113,7 +113,7 @@ export default function AddEventDialog({handleSubmit, formData, handleInputChang
                     <FormControlLabel control={<Checkbox onChange={handleInputChange} value={formData.flex}/>} label="Flexible" />
                     <DialogActions>
                         <Button onClick={handleClose}>Cancel</Button>
-                        <Button type="submit">Add</Button>
+                        <Button type="submit" onClick={handleSubmit}>Add</Button>
                     </DialogActions>
                 </form>
             </DialogContent>

@@ -138,9 +138,9 @@ export default function CustomizedDialogs({open, setOpen, currEvent, deleteEvent
             </Typography>
           </DialogContent>
           <DialogActions>
-            <Button autoFocus onClick={handleClose}>
+            {/* <Button autoFocus onClick={handleClose}>
               Save changes
-            </Button>
+            </Button> */} 
           </DialogActions>
         </BootstrapDialog>
       </React.Fragment>
