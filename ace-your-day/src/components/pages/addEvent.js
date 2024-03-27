@@ -8,7 +8,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
 import colors from './event-utils'
-import { InputLabel, MenuItem, Select } from '@mui/material';
+import { InputLabel, MenuItem, Select, Checkbox, FormControlLabel } from '@mui/material';
 
 export default function AddEventDialog({handleSubmit, formData, handleInputChange, openDialog, setOpenSelect}) {
     const [open, setOpen] = React.useState(false);
@@ -80,17 +80,6 @@ export default function AddEventDialog({handleSubmit, formData, handleInputChang
                         onChange={handleInputChange}
                     />
                     <br /><br />
-                    {/* <TextField
-                        margin="dense"
-                        id="color"
-                        name="color"
-                        label="Event Color"
-                        type="color"
-                        fullWidth
-                        variant="standard"
-                        value={formData.color}
-                        onChange={handleInputChange}
-                    /> */}
                     <InputLabel>Choose Event Category</InputLabel>
                     <Select
                         labelId = 'event-category-label'
@@ -99,7 +88,7 @@ export default function AddEventDialog({handleSubmit, formData, handleInputChang
                         value={formData.category}
                         label = "Event Category"
                         onChange = {handleInputChange}
-                        autoWidth
+                        fullWidth
                     >
                         {/* <MenuItem value="#483957"> Event Category </MenuItem>
                         <MenuItem value='#ab39c3'>Meetings</MenuItem> */}
@@ -107,7 +96,8 @@ export default function AddEventDialog({handleSubmit, formData, handleInputChang
                             <MenuItem value={category.category}>{category.category}</MenuItem>
                         )}
                     </Select>
-                    <InputLabel>End Date/Time</InputLabel>
+                    <br /><br />
+                    <InputLabel>Notes</InputLabel>
                     <TextField
                         margin="dense"
                         id="description"
@@ -119,9 +109,11 @@ export default function AddEventDialog({handleSubmit, formData, handleInputChang
                         onChange={handleInputChange}
                         multiline
                     />
+                    <br /><br />
+                    <FormControlLabel control={<Checkbox onChange={handleInputChange} value={formData.flex}/>} label="Flexible" />
                     <DialogActions>
                         <Button onClick={handleClose}>Cancel</Button>
-                        <Button type="submit" onClick={handleClose}>Add</Button>
+                        <Button type="submit">Add</Button>
                     </DialogActions>
                 </form>
             </DialogContent>
