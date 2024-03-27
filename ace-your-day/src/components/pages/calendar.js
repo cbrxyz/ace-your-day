@@ -7,14 +7,14 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import {formatDate} from '@fullcalendar/core';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { INITIAL_EVENTS, createEventId } from "./event-utils";
+import { INITIAL_EVENTS, createEventId } from "../event-utils";
 
 //MUI Imports
-import AddEventDialog from './addEvent'
-import EventDesDialog from './eventDescription'
+import AddEventDialog from '../addEvent'
+import EventDesDialog from '../eventDescription'
 
 //Other imports
-import colors from './event-utils'
+import colors from '../event-utils'
 
 
 export default function Calendar() {
