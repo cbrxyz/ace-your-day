@@ -3,6 +3,7 @@ import './App.css';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import Home from './components/pages/home'
 import Calendar from './components/pages/calendar'
+import Des from './components/pages/eventDescription'
 
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Home/>}></Route>
           <Route path='/calendar' element={<Calendar/>}></Route>
+          <Route path='/des' element={<Des/>}></Route>
         </Routes>
       </Router>
       

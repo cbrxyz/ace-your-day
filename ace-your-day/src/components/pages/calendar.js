@@ -11,6 +11,7 @@ import { INITIAL_EVENTS, createEventId } from "./event-utils";
 
 //MUI Imports
 import AddEventDialog from './addEvent'
+import EventDesDialog from './eventDescription'
 
 //Other imports
 import colors from './event-utils'
@@ -27,10 +28,13 @@ export default function Calendar() {
         textColor: '',
         category: '',
         description: '',
+        flex: false
     })
 
     
     const [showAdd, openShowAdd] = useState(false)
+    const [openDes, setOpenDes] = useState(false);
+    const [clickInfo, setClickInfo] = useState(null);
 
 
 
@@ -63,10 +67,18 @@ export default function Calendar() {
 
     }
 
+    function deleteEvent(){
+        clickInfo.event.remove();
+        setOpenDes(false);
+    }
+
     function handleEventClick(clickInfo) {
-        if(window.confirm(`Are you sure you want to delete the event "${clickInfo.event.title}"`)) {
-            clickInfo.event.remove()
-        }
+        // if(window.confirm(`Are you sure you want to delete the event "${clickInfo.event.title}"`)) {
+        //     clickInfo.event.remove()
+        // }
+        setClickInfo(clickInfo);
+        setOpenDes(true);
+        
     }
 
     function handleEvents(events){
@@ -75,7 +87,6 @@ export default function Calendar() {
 
     function handleInputChange(event){
         const {name, value} = event.target;
-        console.log("Name: " + name + " Value: " + value);
 
         if(name === 'category'){
             const bgcolor = colors.find(category => category.category === value);
@@ -99,7 +110,7 @@ export default function Calendar() {
 
     function handleSubmit(event){
         event.preventDefault();
-        const {title, start, end, color, textColor} = formData;
+        const {title, start, end, color, textColor, category, description, flex} = formData;
         console.log(formData.color);
         if (title && start && end) {
             if(start < end){
@@ -110,7 +121,12 @@ export default function Calendar() {
                     start,
                     end,
                     color,
-                    textColor
+                    textColor,
+                    extendedProps: {
+                        category,
+                        description,
+                        flex
+                    }
                 });
     
                 setFormatData({
@@ -120,8 +136,10 @@ export default function Calendar() {
                     color: '',
                     textColor: '',
                     category: '',
-                    description: ''
+                    description: '',
+                    flex: false
                 });
+                openShowAdd(false);
             } else {
                 
                 alert("Start date/time must occur before the end date/time!")
@@ -148,6 +166,12 @@ export default function Calendar() {
                 handleSubmit={handleSubmit}
                 showAdd={showAdd}
                 setShowAdd={openShowAdd}
+            />
+            <EventDesDialog
+                open={openDes}
+                setOpen={setOpenDes}
+                currEvent={clickInfo}
+                deleteEvent={deleteEvent}
             />
             <div className='calendar-main'>
                 <FullCalendar
@@ -210,42 +234,7 @@ function Sidebar({weekendsVisible, handleWeekendsToggle, currentEvents, formData
                     toggle weekends
                 </label>
             </div>
-            <div className="calendar-sidebar-section">
-                <h2>Add Event</h2>
-                <form onSubmit={handleSubmit}>
-                    <input
-                        type='text'
-                        name='title'
-                        placeholder="Event Title"
-                        value={formData.title}
-                        onChange={handleInputChange} 
-                    />
-                    <input 
-                        type="datetime-local"
-                        name='start'
-                        placeholder="Start Date and Time"
-                        value={formData.start}
-                        onChange={handleInputChange}
-                    />
-                    <input 
-                        type="datetime-local"
-                        name='end'
-                        placeholder="End Date and Time"
-                        value={formData.end}
-                        onChange={handleInputChange}
-                    />
-                    <input 
-                        type="color"
-                        name="color"
-                        placeholder="Event Color"
-                        value={formData.color}
-                        onChange={handleInputChange}
-                    />
-                    <button type='submit'>Add Event</button>
-                </form>
-            </div>
             <div className="Calendar-sidebar-section">
-               {/* <Button onClick={openDialog}>Add Event</Button> */}
                <AddEventDialog
                     handleSubmit={handleSubmit}
                     formData={formData}
@@ -267,7 +256,7 @@ function Sidebar({weekendsVisible, handleWeekendsToggle, currentEvents, formData
 }
 
 function SidebarEvent({event}) {
-    if(new Date(event.start) < new Date()){
+    if(new Date(event.end) < new Date()){
         return (
             <li key={event.id} style={{textDecoration: 'line-through'}}>
             
