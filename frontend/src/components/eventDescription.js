@@ -67,7 +67,7 @@ export default function CustomizedDialogs({open, setOpen, currEvent, deleteEvent
               <DeleteIcon />
             </IconButton>
           </Tooltip>
-          
+
           <DialogContent dividers>
             <Typography gutterBottom>
               Nothing to say!
@@ -111,7 +111,7 @@ export default function CustomizedDialogs({open, setOpen, currEvent, deleteEvent
             <CloseIcon />
           </IconButton>
           </Tooltip>
-          
+
           <Tooltip title="Delete">
           <IconButton
             aria-label="delete"
@@ -140,11 +140,11 @@ export default function CustomizedDialogs({open, setOpen, currEvent, deleteEvent
           <DialogActions>
             {/* <Button autoFocus onClick={handleClose}>
               Save changes
-            </Button> */} 
+            </Button> */}
           </DialogActions>
         </BootstrapDialog>
       </React.Fragment>
     );
   }
-  
+
 }

@@ -20,13 +20,13 @@ export default function AddEventDialog({handleSubmit, formData, handleInputChang
   const handleClose = () => {
     setOpen(false);
     setOpenSelect(false);
-    
+
   };
 
   React.useEffect(()=> {
     setOpen(openDialog);
   }, [openDialog]);
-    
+
     return (
         <React.Fragment>
             <Button variant="outlined" onClick={handleClickOpen}>
@@ -119,6 +119,6 @@ export default function AddEventDialog({handleSubmit, formData, handleInputChang
             </DialogContent>
         </Dialog>
         </React.Fragment>
-        
+
     );
 }
