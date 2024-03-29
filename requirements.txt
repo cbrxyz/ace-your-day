@@ -4,3 +4,4 @@ django-allauth
 dnspython
 djangorestframework
 drf-yasg
+django-cors-headers
