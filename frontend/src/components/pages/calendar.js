@@ -31,7 +31,7 @@ export default function Calendar() {
         flex: false
     })
 
-    
+
     const [showAdd, openShowAdd] = useState(false)
     const [openDes, setOpenDes] = useState(false);
     const [clickInfo, setClickInfo] = useState(null);
@@ -52,7 +52,7 @@ export default function Calendar() {
 
         const start = new Date(selectInfo.startStr);
         const end = new Date(selectInfo.endStr);
-    
+
         const formatStart = `${start.getFullYear()}-${String(start.getMonth() + 1).padStart(2, '0')}-${String(start.getDate()).padStart(2, '0')}T${String(start.getHours()).padStart(2, '0')}:${String(start.getMinutes()).padStart(2, '0')}`;
         const formatEnd = `${end.getFullYear()}-${String(end.getMonth() + 1).padStart(2, '0')}-${String(end.getDate()).padStart(2, '0')}T${String(end.getHours()).padStart(2, '0')}:${String(end.getMinutes()).padStart(2, '0')}`;
 
@@ -78,7 +78,7 @@ export default function Calendar() {
         // }
         setClickInfo(clickInfo);
         setOpenDes(true);
-        
+
     }
 
     function handleEvents(events){
@@ -103,9 +103,9 @@ export default function Calendar() {
             }));
         }
 
-        
 
-        
+
+
     }
 
     function handleSubmit(event){
@@ -128,7 +128,7 @@ export default function Calendar() {
                         flex
                     }
                 });
-    
+
                 setFormatData({
                     title: '',
                     start: '',
@@ -141,16 +141,16 @@ export default function Calendar() {
                 });
                 openShowAdd(false);
             } else {
-                
+
                 alert("Start date/time must occur before the end date/time!")
             }
-            
+
         } else {
-            
+
             alert("Please fill out all fields!")
         }
 
-        
+
     }
 
 
@@ -198,7 +198,7 @@ export default function Calendar() {
                         eventChange = {function(){}}
                         eventRemove = {function(){}}
                     */
-                />   
+                />
             </div>
         </div>
     )
@@ -241,7 +241,7 @@ function Sidebar({weekendsVisible, handleWeekendsToggle, currentEvents, formData
                     handleInputChange={handleInputChange}
                     openDialog={showAdd}
                     setOpenSelect={setShowAdd}
-                />    
+                />
             </div>
             <div className="calendar-sidebar-section">
                 <h2>All Events ({currentEvents.length})</h2>
@@ -259,19 +259,19 @@ function SidebarEvent({event}) {
     if(new Date(event.end) < new Date()){
         return (
             <li key={event.id} style={{textDecoration: 'line-through'}}>
-            
+
             <b>{formatDate(event.start, {year: 'numeric', month: 'short', day: 'numeric'})}</b>
             <i>&nbsp;&nbsp;&nbsp;&nbsp;{event.title}</i>
-        </li> 
+        </li>
         )
     } else {
         return (
             <li key={event.id}>
-                
+
                 <b>{formatDate(event.start, {year: 'numeric', month: 'short', day: 'numeric'})}</b>
                 <i>&nbsp;&nbsp;&nbsp;&nbsp;{event.title}</i>
             </li>
-        )   
+        )
     }
-    
+
 }

@@ -10,7 +10,7 @@ class Calendar(models.Model):
     _id = models.ObjectIdField()
     name = models.CharField(max_length=100)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    color = models.CharField(max_length=6) # hex without hashtag
+    color = models.CharField(max_length=6)  # hex without hashtag
 
 
 class Event(models.Model):

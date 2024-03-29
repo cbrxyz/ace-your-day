@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 from pathlib import Path
 
+from djongo.operations import DatabaseOperations
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -162,11 +163,9 @@ SOCIALACCOUNT_PROVIDERS = {
         "AUTH_PARAMS": {
             "access_type": "offline",
         },
-        'FETCH_USERINFO' : True,
+        "FETCH_USERINFO": True,
     },
 }
-
-from djongo.operations import DatabaseOperations
 
 DatabaseOperations.conditional_expression_supported_in_where_clause = (
     lambda *args, **kwargs: False
