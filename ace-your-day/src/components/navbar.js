@@ -1,7 +1,6 @@
 import React from "react";
 import {
   AppBar,
-  makeStyles,
   Toolbar,
   CssBaseline,
   Typography,
@@ -9,6 +8,10 @@ import {
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import logo from "./images/Logo.png";
+
+import { ThemeProvider, createMuiTheme, makeStyles } from '@material-ui/core/styles';
+
+const theme = createMuiTheme();
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -26,7 +29,8 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: "1",
     height: "auto",
     cursor: "pointer",
-    marginRight: theme.spacing(45),
+    marginLeft: theme.spacing(-8),
+    marginRight: theme.spacing(25),
     "& img": {
       width: "auto", // Make the width of the image responsive
       height: "auto", // Allow the height to adjust automatically
@@ -39,35 +43,38 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "20px",
   },
   button: {
+    marginRight: theme.spacing(-25),
     backgroundColor: "#FFEEDC",
   },
 }));
 
 function Navbar() {
   const classes = useStyles();
-  
   return (
-    <AppBar position="static" className={classes.toolbar}>
-      <CssBaseline />
-      <Toolbar className="logo">
-        <Typography variant="h4" className={classes.logo}>
-          <img src={logo} alt="Logo" height="40" />
-        </Typography>
-        <Typography variant="h4" className={classes.logo}>
-          Ace Your Day
-        </Typography>
-        <div className={classes.buttonWrapper}>
-          {/* Replace this button for Google Log In */}
-          <Button
-            variant="contained"
-            component={Link}
-            to="/calendar"
-            className="button">
-            Log in with Google
-          </Button>
-        </div>
-      </Toolbar>
-    </AppBar>
+    <ThemeProvider theme={theme}>
+      <AppBar position="static" className={classes.toolbar}>
+        <CssBaseline />
+        <Toolbar className={classes.logo}>
+          <Typography variant="h4" className={classes.logo}>
+            <img src={logo} alt="Logo" height="40" />
+          </Typography>
+          <Typography variant="h4" className={classes.logo}>
+            Ace Your Day
+          </Typography>
+          <div className={classes.buttonWrapper}>
+            <Button
+              variant="contained"
+              component={Link}
+              to="/calendar"
+              className={classes.button}
+            >
+              Log in with Google
+            </Button>
+          </div>
+        </Toolbar>
+      </AppBar>
+    </ThemeProvider>
   );
 }
+
 export default Navbar;
