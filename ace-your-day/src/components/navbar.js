@@ -1,78 +1,67 @@
 import React from "react";
-import {
-  AppBar,
-  Toolbar,
-  CssBaseline,
-  Typography,
-  Button
-} from "@material-ui/core";
+import { AppBar, Toolbar, CssBaseline, Typography, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import logo from "./images/Logo.png";
 
-import { ThemeProvider, createMuiTheme, makeStyles } from '@material-ui/core/styles';
+import { ThemeProvider, createTheme, styled } from '@mui/material/styles';
 
-const theme = createMuiTheme();
+const theme = createTheme();
 
-const useStyles = makeStyles((theme) => ({
-  toolbar: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "auto",
-    margin: "0px",
-    backgroundColor: "#081F46",
-  },
-  navlinks: {
-    marginLeft: "auto",
-    display: "flex",
-  },
- logo: {
-    flexGrow: "1",
-    height: "auto",
-    cursor: "pointer",
-    marginLeft: theme.spacing(-8),
-    marginRight: theme.spacing(25),
-    "& img": {
-      width: "auto", // Make the width of the image responsive
-      height: "auto", // Allow the height to adjust automatically
-      maxHeight: "50px", // Set a maximum height for the logo
-    },
-  },
-  link: {
-    textDecoration: "none",
-    color: "#081F46",
-    fontSize: "20px",
-  },
-  button: {
-    marginRight: theme.spacing(-25),
-    backgroundColor: "#FFEEDC",
-  },
-}));
+const NavbarContainer = styled(AppBar)({
+  backgroundColor: '#081F46',
+});
+
+const LogoImage = styled('img')({
+  width: 'auto',
+  height: 'auto',
+  maxHeight: '50px',
+});
+
+const TitleContainer = styled(Typography)({
+  display: 'flex',
+  alignItems: 'center',
+  flexGrow: 1,
+  justifyContent: 'center',
+});
+
+const ButtonWrapper = styled('div')({
+  marginLeft: 'auto',
+});
+
+const StyledButton = styled(Button)({
+  color: 'black', // Set the text color to black
+});
 
 function Navbar() {
-  const classes = useStyles();
   return (
     <ThemeProvider theme={theme}>
-      <AppBar position="static" className={classes.toolbar}>
+      <NavbarContainer position="static">
         <CssBaseline />
-        <Toolbar className={classes.logo}>
-          <Typography variant="h4" className={classes.logo}>
-            <img src={logo} alt="Logo" height="40" />
-          </Typography>
-          <Typography variant="h4" className={classes.logo}>
+        <Toolbar>
+          <LogoImage src={logo} alt="Logo" height="40" />
+          <TitleContainer variant="h4">
             Ace Your Day
-          </Typography>
-          <div className={classes.buttonWrapper}>
-            <Button
+          </TitleContainer>
+          <ButtonWrapper>
+            <StyledButton
               variant="contained"
               component={Link}
               to="/calendar"
-              className={classes.button}
+              sx={{
+                backgroundColor: '#FFEEDC',
+                '&:hover': {
+                  backgroundColor: '#FFEEDC',
+                },
+                '&:active': {
+                  backgroundColor: '#FFEEDC',
+                },
+              }}
             >
               Log in with Google
-            </Button>
-          </div>
+            </StyledButton>
+          </ButtonWrapper>
         </Toolbar>
-      </AppBar>
+      </NavbarContainer>
     </ThemeProvider>
   );
 }
