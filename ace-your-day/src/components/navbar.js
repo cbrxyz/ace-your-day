@@ -2,7 +2,6 @@ import React from "react";
 import { AppBar, Toolbar, CssBaseline, Typography, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import logo from "./images/Logo.png";
-
 import { ThemeProvider, createTheme, styled } from '@mui/material/styles';
 
 const theme = createTheme();
@@ -29,10 +28,10 @@ const ButtonWrapper = styled('div')({
 });
 
 const StyledButton = styled(Button)({
-  color: 'black', // Set the text color to black
+  color: 'black',
 });
 
-function Navbar() {
+function navbar() {
   return (
     <ThemeProvider theme={theme}>
       <NavbarContainer position="static">
@@ -49,15 +48,10 @@ function Navbar() {
               to="/calendar"
               sx={{
                 backgroundColor: '#FFEEDC',
-                '&:hover': {
-                  backgroundColor: '#FFEEDC',
-                },
-                '&:active': {
-                  backgroundColor: '#FFEEDC',
-                },
+                '&:hover': { backgroundColor: '#FFEEDC'},
+                '&:active': { backgroundColor: '#FFEEDC'},
               }}
-            >
-              Log in with Google
+            >Log in with Google
             </StyledButton>
           </ButtonWrapper>
         </Toolbar>
@@ -66,4 +60,4 @@ function Navbar() {
   );
 }
 
-export default Navbar;
+export default navbar;
