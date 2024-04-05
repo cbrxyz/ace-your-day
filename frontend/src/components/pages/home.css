@@ -1,3 +1,68 @@
-h1 {
-    color: pink;
+*{
+    margin: 0;
+    padding: -1000;
+    box-sizing: border-box; 
+}
+body{
+    .space-mono-regular {
+        font-family: "Space Mono", monospace;
+        font-weight: 400;
+        font-style: normal;
+    }
+      
+}
+main{
+    display: flex;
+    height: calc(100vh - 100px);
+    align-items: center;
+    justify-content: center;
+}
+.hero-img{
+    max-width: 800px;
+    height: 400px;
+}
+
+.content-left{
+    width: 50%;
+}
+
+main h1{
+    font-size: 54px;
+    color:black;
+    text-transform: uppercase;
+}
+main p{
+    font-size: 14px;
+    font-weight: 400;
+    color: rgb(92, 92, 92);
+    line-height: 31.5px;
+    margin: 30px 0;
+}
+.content-left li{
+    list-style-type: none;
+}
+.content-left li a{
+    text-decoration: none;
+    color: black;
+    display: inline-block;
+}
+.cta{
+    padding: 10px 10px;
+    background: #FF775D;
+    color: black;
+    outline: none;
+    border: none;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 50px;
+}
+.signin-btn{
+    padding: 10px 30px;
+    background: #FFEEDC;
+    color: black;
+    outline: none;
+    border: none;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 50px;
 }
