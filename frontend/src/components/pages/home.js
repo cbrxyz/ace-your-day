@@ -1,7 +1,7 @@
 import React from "react";
 import './home.css';
-import logo from './homepage-photos/Logo.png';
-import blob from './homepage-photos/Home-blob.jpg';
+import logo from '../images/Logo.png';
+// import blob from './homepage-photos/Home-blob.jpg';
 
 const Home = () => {
     return (
@@ -24,7 +24,7 @@ const Home = () => {
                     <li><a href="#" class="cta">Get Started Now</a></li>
                 </div>
                 <div class="content-right">
-                    <img src={blob} alt="" class="hero-img"/>
+                    <img src={logo} alt="" class="hero-img"/>
                 </div>
             </main>
             </body>
