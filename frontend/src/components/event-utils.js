@@ -17,7 +17,67 @@ export const INITIAL_EVENTS = [
         title: "Timed event",
         start: todayStr + 'T12:00:00',
         textColor: 'purple'
-    }
+    },
+    {
+        id: createEventId(),
+        title: "Study Time",
+        start: "2024-04-15T08:00:00-04:00",
+        end: "2024-04-15T10:00:00-04:00",
+        color: "#cf6daa",
+        textColor: "purple",
+        description: "Do math homework",
+        flexible: true
+    },
+    {
+        id: createEventId(),
+        title: "Meeting 1",
+        start: "2024-04-15T10:00:00-04:00",
+        end: "2024-04-15T11:00:00-04:00",
+        color: "#cf6daa",
+        textColor: "purple",
+        description: "My event",
+        flexible: false
+    },
+    {
+        id: createEventId(),
+        title: "Gym",
+        start: "2024-04-15T11:10:00-04:00",
+        end: "2024-04-15T12:10:00-04:00",
+        color: "#cf6daa",
+        textColor: "purple",
+        description: "upper body",
+        flexible: true
+    },
+    {
+        id: createEventId(),
+        title: "Study time 2",
+        start: "2024-04-15T12:20:00-04:00",
+        end: "2024-04-15T14:20:00-04:00",
+        color: "#cf6daa",
+        textColor: "purple",
+        description: "study for finals",
+        flexible: true
+    },
+    {
+        id: createEventId(),
+        title: "Meeting 2",
+        start: "2024-04-15T17:00:00-04:00",
+        end: "2024-04-15T19:00:00-04:00",
+        color: "#cf6daa",
+        textColor: "purple",
+        description: "My event",
+        flexible: false
+    },
+    {
+        id: createEventId(),
+        title: "Free Time",
+        start: "2024-04-15T19:10:00-04:00",
+        end: "2024-04-15T22:00:00-04:00",
+        color: "#cf6daa",
+        textColor: "purple",
+        description: "Leisure/Relaxation",
+        flexible: true
+    }   
 ]
 
 export function createEventId(){
