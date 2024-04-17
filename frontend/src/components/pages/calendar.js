@@ -15,6 +15,7 @@ import EventDesDialog from '../eventDescription'
 
 //Other imports
 import colors from '../event-utils'
+import axios from "axios";
 
 
 export default function Calendar() {
@@ -147,7 +148,7 @@ export default function Calendar() {
 
         } else {
 
-            alert("Please fill out all fields!")
+            alert("d;lfkjs")
         }
 
 
@@ -214,6 +215,7 @@ function renderEventContent(eventInfo){
 }
 
 function Sidebar({weekendsVisible, handleWeekendsToggle, currentEvents, formData, handleInputChange, handleSubmit, showAdd, setShowAdd}) {
+    let response = axios.get("/api/users/").then((res) => console.log(res));
     return (
         <div className="calendar-sidebar">
             <div className="calendar-sidebar-section">
@@ -222,6 +224,7 @@ function Sidebar({weekendsVisible, handleWeekendsToggle, currentEvents, formData
                     <li>Select dates and you will be prompted to create a new event</li>
                     <li>Drag, drop, and reize events</li>
                     <li>Click an event to delete it</li>
+                    <li>hi</li>
                 </ul>
             </div>
             <div className="calendar-sidebar-section">
