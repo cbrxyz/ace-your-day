@@ -22,7 +22,7 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions, routers
 
-from .views import UserViewSet, EventViewSet, CalendarViewSet
+from .views import UserViewSet, EventViewSet, CalendarViewSet, EventyView
 
 router = routers.DefaultRouter()
 router.register(r"users", UserViewSet)
@@ -47,6 +47,7 @@ urlpatterns = [
     # path("app/", include("ace_your_day.urls")),
     path("", TemplateView.as_view(template_name="index.html")),
     path("api/", include(router.urls)),
+    path("api/eventy", EventyView.as_view()),
     path("accounts/", include("allauth.urls")),
     path("logout", LogoutView.as_view()),
     # path("api/", include("rest_framework.urls", namespace="rest_framework")),
