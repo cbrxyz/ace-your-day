@@ -3,7 +3,6 @@ import { AppBar, Toolbar, CssBaseline, Typography, Button, Menu, MenuItem, Avata
 import { Link, useNavigate } from "react-router-dom";
 import logo from "./images/Logo.png";
 import { ThemeProvider, createTheme, styled } from '@mui/material/styles';
-import axios from "axios";
 
 const theme = createTheme();
 
@@ -33,25 +32,22 @@ const StyledButton = styled(Button)({
 });
 
 function Navbar() {
-  // Use State tracks whether the user is logged in
   const [userLoggedIn, setUserLoggedIn] = useState(localStorage.getItem("loggedIn") === "true");
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const [preferencesDialogOpen, setPreferencesDialogOpen] = useState(false);
   const [preferences, setPreferences] = useState(() => {
     const savedPrefs = localStorage.getItem("preferences");
-    return savedPrefs ? JSON.parse(savedPrefs) : { question1: "", question2: "", question3: "" };
+    return savedPrefs ? JSON.parse(savedPrefs) : { question1: "", question2: "", question3: "", question4: "" };
   });
   const navigate = useNavigate(); 
 
   useEffect(() => {
-    // Update local storage whenever userLoggedIn state changes
     localStorage.setItem("loggedIn", userLoggedIn);
     localStorage.setItem("preferences", JSON.stringify(preferences));
   }, [userLoggedIn, preferences]);
 
   const handleLogin = () => {
-    // TODO: I think make the API call here in order to authenticate user
     setUserLoggedIn(true);
   };
 
@@ -81,12 +77,7 @@ function Navbar() {
   const handlePreferenceChange = (event) => {
     const newPreferences = { ...preferences, [event.target.name]: event.target.value };
     setPreferences(newPreferences);
-
-    axios.post('/api/users', newPreferences).then(response => {
-      console.log("Preferences saved to server!");
-    }).catch(error => {
-      console.error("Failed to save preferences:", error);
-    });
+  
   };
 
   return (
@@ -119,7 +110,6 @@ function Navbar() {
               anchorEl={anchorEl}
               open={open}
               onClose={handleClose}
-              // TODO: change this button to show google profile on the top right instead of the letter A
             >
               <MenuItem onClick={handlePreferencesOpen}>Preferences</MenuItem>
               <MenuItem onClick={handleLogout}>Logout</MenuItem>
@@ -129,8 +119,8 @@ function Navbar() {
               onClose={handlePreferencesClose}
               sx={{
                 '& .MuiDialog-paper': {
-                  width: '80%',  // Responsive width
-                  maxWidth: '400px',  // Maximum width
+                  width: '80%',
+                  maxWidth: '400px',
                 }
               }}
             >
@@ -172,16 +162,27 @@ function Navbar() {
                   </Select>
                 </FormControl>
                 <FormControl fullWidth margin="normal">
-                  <InputLabel>Question 3</InputLabel>
+                  <InputLabel>I want to..</InputLabel> 
                   <Select
                     name="question3"
                     value={preferences.question3}
                     label="Question 3"
                     onChange={handlePreferenceChange}
                   >
-                    <MenuItem value="option1">Option 1</MenuItem>
-                    <MenuItem value="option2">Option 2</MenuItem>
-
+                    <MenuItem value="option1">group similar events</MenuItem>
+                    <MenuItem value="option2">spread similar events</MenuItem>
+                  </Select>
+                </FormControl>
+                <FormControl fullWidth margin="normal">
+                  <InputLabel>I want to..</InputLabel> 
+                  <Select
+                    name="question4"
+                    value={preferences.question4}
+                    label="Question 4"
+                    onChange={handlePreferenceChange}
+                  >
+                    <MenuItem value="option1">group my free time</MenuItem>
+                    <MenuItem value="option2">spread my free time</MenuItem>
                   </Select>
                 </FormControl>
               </DialogContent>
