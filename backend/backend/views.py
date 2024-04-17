@@ -1,6 +1,8 @@
+import coreapi
 from django.http import JsonResponse
 from rest_framework import permissions, views, viewsets
 from rest_framework.decorators import action
+from rest_framework.filters import BaseFilterBackend
 
 from .models import Calendar, Event, User
 from .openai import EventyAI
@@ -33,11 +35,23 @@ class CalendarViewSet(viewsets.ModelViewSet):
     @action(methods=["get"], detail=True)
     def events(self, request, pk=None):
         return Event.objects.filter(
-            calendar=self, calendar__owner__access_token=self.request.user
+            calendar=self,
+            calendar__owner__access_token=self.request.user,
         )
 
 
+class SimpleFilterBackend(BaseFilterBackend):
+    def get_schema_fields(self, view):
+        return [
+            coreapi.Field(
+                name="message", location="message", required=False, type="string"
+            ),
+        ]
+
+
 class EventyView(views.APIView):
+    filter_backends = (SimpleFilterBackend,)
+
     def get(self, request):
-        response = EventyAI().get_response("What is 2 + 2?")
+        response = EventyAI().get_response(request.GET["message"])
         return JsonResponse({"message": response.choices[0].message.content})

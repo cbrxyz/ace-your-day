@@ -5,3 +5,4 @@ dnspython
 djangorestframework
 drf-yasg
 django-cors-headers
+coreapi==2.3.3
