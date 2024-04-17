@@ -12,9 +12,11 @@ import { INITIAL_EVENTS, createEventId } from "../event-utils";
 //MUI Imports
 import AddEventDialog from '../addEvent'
 import EventDesDialog from '../eventDescription'
+import { InputLabel, TextField} from '@mui/material';
 
 //Other imports
 import colors from '../event-utils'
+import DatePicker from "react-datepicker";
 
 
 export default function Calendar() {
@@ -223,6 +225,18 @@ function Sidebar({weekendsVisible, handleWeekendsToggle, currentEvents, formData
                     <li>Drag, drop, and reize events</li>
                     <li>Click an event to delete it</li>
                 </ul>
+            </div>
+            <div className="calendar-sidebar-section">
+                <InputLabel>Select a Day to Optimize</InputLabel>
+                        <TextField
+                            required
+                            margin="dense"
+                            id="opt"
+                            name="opt"
+                            type="date"
+                            fullWidth
+                            variant="standard"
+                        />
             </div>
             <div className="calendar-sidebar-section">
                 <label>

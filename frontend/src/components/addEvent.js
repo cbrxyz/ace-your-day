@@ -8,7 +8,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
 import colors from './event-utils'
-import { InputLabel, MenuItem, Select, Checkbox, FormControlLabel } from '@mui/material';
+import { InputLabel, MenuItem, Select, Checkbox, FormControlLabel} from '@mui/material';
 
 export default function AddEventDialog({handleSubmit, formData, handleInputChange, openDialog, setOpenSelect}) {
     const [open, setOpen] = React.useState(false);
@@ -110,7 +110,19 @@ export default function AddEventDialog({handleSubmit, formData, handleInputChang
                         multiline
                     />
                     <br /><br />
-                    <FormControlLabel control={<Checkbox onChange={handleInputChange} value={formData.flex}/>} label="Flexible" />
+                    <InputLabel>This event time is...</InputLabel>
+                    <Select
+                        labelId = 'event-category-label'
+                        name = 'flex'
+                        id = 'event-category'
+                        value={formData.flex}
+                        label = "Event Flexibility"
+                        onChange = {handleInputChange}
+                        fullWidth
+                    >
+                        <MenuItem value="yes"> Flexible </MenuItem>
+                        <MenuItem value="no">Not Flexible</MenuItem>
+                    </Select>
                     <DialogActions>
                         <Button onClick={handleClose}>Cancel</Button>
                         <Button type="submit" onClick={handleSubmit}>Add</Button>
