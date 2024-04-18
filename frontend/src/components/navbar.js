@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { AppBar, Toolbar, CssBaseline, Typography, Button, Menu, MenuItem, Avatar, Dialog, DialogTitle, DialogContent, FormControl, InputLabel, Select, DialogActions } from "@mui/material";
+import { AppBar, Toolbar, CssBaseline, Typography, Button, Menu, MenuItem, Avatar, Dialog, DialogTitle, DialogContent, FormControl, InputLabel, Select, DialogActions, Link as MuiLink } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "./images/Logo.png";
 import { ThemeProvider, createTheme, styled } from '@mui/material/styles';
@@ -27,8 +27,23 @@ const ButtonWrapper = styled('div')({
   marginLeft: 'auto',
 });
 
-const StyledButton = styled(Button)({
-  color: 'black',
+
+const GoogleLoginButton = styled(MuiLink)({
+  display: 'flex',
+  alignItems: 'center',
+  backgroundColor: '#fff',
+  color: '#757575',
+  padding: '8px 24px',
+  borderRadius: '4px',
+  textDecoration: 'none',
+  '&:hover': {
+    backgroundColor: '#f5f5f5',
+  },
+  cursor: 'pointer',
+});
+
+const GoogleIconWrapper = styled('div')({
+  marginRight: '10px',
 });
 
 function Navbar() {
@@ -91,18 +106,15 @@ function Navbar() {
           </TitleContainer>
           <ButtonWrapper> 
           {!userLoggedIn ? (
-            <StyledButton
-              onClick={handleLogin}
-              variant="contained"
+            <GoogleLoginButton
               component={Link}
-              to="/calendar"
-              sx={{
-                backgroundColor: '#FFEEDC',
-                '&:hover': { backgroundColor: '#FFEEDC'},
-                '&:active': { backgroundColor: '#FFEEDC'},
-              }}
-            >Log in with Google
-            </StyledButton>
+              to="/calendar"  
+            >
+              <GoogleIconWrapper>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google icon" style={{ width: '20px' }} />
+              </GoogleIconWrapper>
+              <Typography variant="button" style={{ fontWeight: 'bold' }}>Sign in with Google</Typography>
+            </GoogleLoginButton>
           ) : (
             <>
             <Avatar onClick={handleMenu} sx={{ bgcolor: '#081F46', cursor: 'pointer' }}>E</Avatar>
