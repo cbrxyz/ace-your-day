@@ -13,6 +13,7 @@ import { INITIAL_EVENTS, createEventId } from "../event-utils";
 import AddEventDialog from '../addEvent'
 import EventDesDialog from '../eventDescription'
 import { InputLabel, TextField} from '@mui/material';
+import OptimizeDialog from '../optimize'
 
 //Other imports
 import colors from '../event-utils'
@@ -237,6 +238,7 @@ function Sidebar({weekendsVisible, handleWeekendsToggle, currentEvents, formData
                             fullWidth
                             variant="standard"
                         />
+                <OptimizeDialog/>
             </div>
             <div className="calendar-sidebar-section">
                 <label>
