@@ -215,7 +215,8 @@ function renderEventContent(eventInfo){
 }
 
 function Sidebar({weekendsVisible, handleWeekendsToggle, currentEvents, formData, handleInputChange, handleSubmit, showAdd, setShowAdd}) {
-    let response = axios.get("/api/users/").then((res) => console.log(res));
+    // let response = axios.get("/api/users/").then((res) => console.log(res));
+    // TODO: fix axios request
     return (
         <div className="calendar-sidebar">
             <div className="calendar-sidebar-section">

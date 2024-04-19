@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { AppBar, Toolbar, CssBaseline, Typography, Button, Menu, MenuItem, Avatar, Dialog, DialogTitle, DialogContent, FormControl, InputLabel, Select, DialogActions, Link as MuiLink } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate,withRouter, BrowserRouter as Router, Route, Switch, useLocation } from "react-router-dom";
 import logo from "./images/Logo.png";
+import profile from "./images/profile.png";
 import { ThemeProvider, createTheme, styled } from '@mui/material/styles';
+import axios from 'axios';
 
 const theme = createTheme();
 
@@ -47,7 +49,18 @@ const GoogleIconWrapper = styled('div')({
 });
 
 function Navbar() {
-  const [userLoggedIn, setUserLoggedIn] = useState(localStorage.getItem("loggedIn") === "true");
+  const location = useLocation();
+  console.log('Current path:', location.pathname);
+
+  let config = {
+    headers: {
+      'accept': "application/json",
+      'authorization': 'Basic Y2FtZXJvbmJyb3duOmFjZXlvdXJkYXk=',
+      'X-CSRFToken': 'FnXyPQxZOq2sp9deXnaYnofChj8tl96tyuc1Cq8NjlENxD73x5fbhyXOV9ccbmmp'
+    }
+  }
+  let response = axios.get("/api/users", config).then((res) => console.log(res));
+  const [userLoggedIn, setUserLoggedIn] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const [preferencesDialogOpen, setPreferencesDialogOpen] = useState(false);
@@ -62,10 +75,6 @@ function Navbar() {
     localStorage.setItem("preferences", JSON.stringify(preferences));
   }, [userLoggedIn, preferences]);
 
-  const handleLogin = () => {
-    setUserLoggedIn(true);
-  };
-
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -75,7 +84,7 @@ function Navbar() {
   };
 
   const handleLogout = () => {
-    setUserLoggedIn(false);
+    setUserLoggedIn(false)
     navigate('/');
     handleClose();
   };
@@ -104,20 +113,21 @@ function Navbar() {
           <TitleContainer variant="h4">
             Ace Your Day
           </TitleContainer>
-          <ButtonWrapper> 
-          {!userLoggedIn ? (
+          <ButtonWrapper>
+          {location.pathname == "/" ? (
+            console.log(userLoggedIn),
+            console.log("user is not logged in yet"),
             <GoogleLoginButton
               component={Link}
-              to="/calendar"  
+              to="http://127.0.0.1:8000/accounts/google/login/"
             >
               <GoogleIconWrapper>
                 <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google icon" style={{ width: '20px' }} />
               </GoogleIconWrapper>
               <Typography variant="button" style={{ fontWeight: 'bold' }}>Sign in with Google</Typography>
             </GoogleLoginButton>
-          ) : (
-            <>
-            <Avatar onClick={handleMenu} sx={{ bgcolor: '#081F46', cursor: 'pointer' }}>E</Avatar>
+          ) : (console.log(userLoggedIn),console.log("user is logged in"), <>
+            <LogoImage onClick={handleMenu} src={profile} alt="Profile" height="40" />
             <Menu
               anchorEl={anchorEl}
               open={open}
@@ -203,7 +213,7 @@ function Navbar() {
               </DialogActions>
             </Dialog>
           </>
-          )}
+              )}
           </ButtonWrapper>
         </Toolbar>
       </NavbarContainer>
