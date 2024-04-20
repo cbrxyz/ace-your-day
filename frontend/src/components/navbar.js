@@ -76,7 +76,7 @@ function Navbar() {
       'X-CSRFToken': getCSRFToken(),
     }
   }
-  let response = axios.get("/api", config).then((res) => console.log(res));
+  let response = axios.get("/api/users", config).then((res) => console.log(res));
   // axios.get('/api/users', config)
   //   .then(response => console.log(response))
   //   .catch(error => console.error(error));

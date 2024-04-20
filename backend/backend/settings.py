@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
-    "allauth.socialaccount.providers.google",
+    "allauth.socialaccount.providers.github",
     "corsheaders",
     "rest_framework",
     "backend",
@@ -174,22 +174,21 @@ AUTHENTICATION_BACKENDS = [
     'social_core.backends.facebook.FacebookOAuth2',
 ]
 
-# SOCIALACCOUNT_PROVIDERS = {
-#     "google": {
-#         "SCOPE": [
-#             "profile",
-#             "email",
-#         ],
-#         "APP": {
-#             "client_id": os.environ["CLIENT_ID"],
-#             "secret": os.environ["CLIENT_SECRET"],
-#         },
-#         "AUTH_PARAMS": {
-#             "access_type": "offline",
-#         },
-#         "FETCH_USERINFO": True,
-#     },
-# }
+SOCIALACCOUNT_PROVIDERS = {
+    "github": {
+        "SCOPE": [
+            "user",
+            "repo",
+        ],
+        "CLIENT_ID": os.environ["CLIENT_ID"],
+        "SECRET": os.environ["CLIENT_SECRET"],
+        
+        # "AUTH_PARAMS": {
+        #     "access_type": "offline",
+        # },
+        "FETCH_USERINFO": True,
+    },
+}
 
 DatabaseOperations.conditional_expression_supported_in_where_clause = (
     lambda *args, **kwargs: False
@@ -227,10 +226,10 @@ def github_login(request):
     github_authorize_url = 'https://github.com/oauth/complete/github'
     params = {
         'client_id': SOCIAL_AUTH_GITHUB_KEY,
-        'redirect_uri': request.build_absolute_uri(reverse('github_callback')),
+        # 'redirect_uri': request.build_absolute_uri(reverse('github_callback')),
         'state': state,
     }
-    print(request.build_absolute_uri(reverse('github_callback')))
+    # print(request.build_absolute_uri(reverse('github_callback')))
     LOGIN_REDIRECT_URL = f"{github_authorize_url}?{'&'.join([f'{key}={value}' for key, value in params.items()])}"
     return redirect(LOGIN_REDIRECT_URL)
 
@@ -250,7 +249,7 @@ def github_callback(request):
         'client_id': SOCIAL_AUTH_GITHUB_KEY,
         'client_secret': SOCIAL_AUTH_GITHUB_SECRET,
         'code': code,
-        'redirect_uri': request.build_absolute_uri(reverse('github_callback')),
+        # 'redirect_uri': request.build_absolute_uri(reverse('github_callback')),
         'state': state,
     }
     headers = {
@@ -297,7 +296,7 @@ def github_callback(request):
     # response.set_cookie('access_token', access_token, httpony=False, secure=True, path='/', samesite='Lax')
     # return response
     print(access_token)
-    redirect_url = f'http://localhost:3000/?access_token={access_token}'
+    redirect_url = f'http://localhost:3000/calendar?access_token={access_token}'
     return redirect(redirect_url)
 
 # LOGIN_REDIRECT_URL = "http://localhost:8000/oauth/complete/github/?code=42c47d60179e3df495d4&state="
