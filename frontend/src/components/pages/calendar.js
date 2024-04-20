@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect} from "react";
 import './calendar.css';
 
 //FullCalendar imports
@@ -38,6 +38,8 @@ export default function Calendar() {
     const [showAdd, openShowAdd] = useState(false)
     const [openDes, setOpenDes] = useState(false);
     const [clickInfo, setClickInfo] = useState(null);
+    const [openOpt, setOpenOpt] = useState(false);
+    
 
 
 
@@ -45,6 +47,7 @@ export default function Calendar() {
 
     function handleWeekendsToggle(){
         setWeekendsVisible(!weekendsVisible)
+        setOpenOpt(true);
     }
 
     function handleDateSelect(selectInfo){
@@ -169,6 +172,8 @@ export default function Calendar() {
                 handleSubmit={handleSubmit}
                 showAdd={showAdd}
                 setShowAdd={openShowAdd}
+                openOpt={openOpt}
+                setOpt={setOpenOpt}
             />
             <EventDesDialog
                 open={openDes}
@@ -216,7 +221,24 @@ function renderEventContent(eventInfo){
     )
 }
 
-function Sidebar({weekendsVisible, handleWeekendsToggle, currentEvents, formData, handleInputChange, handleSubmit, showAdd, setShowAdd}) {
+function Sidebar({weekendsVisible, handleWeekendsToggle, currentEvents, formData, handleInputChange, handleSubmit, showAdd, setShowAdd, showOpt, setOpt}) {
+    const [chosenDate, setChosenDate] = useState('');
+    
+    useEffect(() => {
+        const storedDate = localStorage.getItem("opt");
+        console.log("Stored Date:", storedDate);
+        if(storedDate) {
+            setChosenDate(storedDate);
+        }
+    }, []);
+
+    const handleDateChange = (event) => {
+        const newDate = event.target.value;
+        console.log("New Date Selected:", newDate);
+        setChosenDate(newDate);
+        localStorage.setItem("opt", newDate);
+    }
+
     return (
         <div className="calendar-sidebar">
             <div className="calendar-sidebar-section">
@@ -237,9 +259,16 @@ function Sidebar({weekendsVisible, handleWeekendsToggle, currentEvents, formData
                             type="date"
                             fullWidth
                             variant="standard"
+                            value={chosenDate}
+                            onChange={handleDateChange}
                         />
-                <OptimizeDialog/>
+                <OptimizeDialog
+                    openDialog={showOpt}
+                    setOpenSelect={setOpt}
+                    date={chosenDate}
+                />
             </div>
+            
             <div className="calendar-sidebar-section">
                 <label>
                     <input

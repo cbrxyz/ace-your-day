@@ -10,7 +10,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import colors from './event-utils'
 import { InputLabel, MenuItem, Select, Checkbox, FormControlLabel} from '@mui/material';
 
-export default function AddEventDialog({handleSubmit, openDialog, setOpenSelect}) {
+export default function AddEventDialog({openDialog, setOpenSelect, date, output}) {
     const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -30,22 +30,20 @@ export default function AddEventDialog({handleSubmit, openDialog, setOpenSelect}
     return (
         <React.Fragment>
             <Button variant="outlined" onClick={handleClickOpen}>
-                Add Event
+                Optimize
             </Button>
             <Dialog
                 open={open}
                 onClose={handleClose}
             >
-            <DialogTitle>Add Event</DialogTitle>
+            <DialogTitle>Optimizing {date}...</DialogTitle>
+            {console.log(date)}
             <DialogContent>
                 <DialogContentText>Fill out the fields below to add an event to your calendar!</DialogContentText>
-                <form onSubmit={handleSubmit}>
                     
                     <DialogActions>
-                        <Button onClick={handleClose}>Cancel</Button>
-                        <Button type="submit" onClick={handleSubmit}>Add</Button>
+                        <Button onClick={handleClose}>Close</Button>
                     </DialogActions>
-                </form>
             </DialogContent>
         </Dialog>
         </React.Fragment>
