@@ -52,11 +52,16 @@ function Navbar() {
   const location = useLocation();
   console.log('Current path:', location.pathname);
 
+  function getCSRFToken() {
+    const csrfTokenElement = document.querySelector('input[name="csrfmiddlewaretoken"]');
+    return csrfTokenElement ? csrfTokenElement.value : null;
+  }
+
   let config = {
     headers: {
       'accept': "application/json",
       'authorization': 'Basic Y2FtZXJvbmJyb3duOmFjZXlvdXJkYXk=',
-      'X-CSRFToken': 'FnXyPQxZOq2sp9deXnaYnofChj8tl96tyuc1Cq8NjlENxD73x5fbhyXOV9ccbmmp'
+      'X-CSRFToken': getCSRFToken()
     }
   }
   let response = axios.get("/api/users", config).then((res) => console.log(res));

@@ -4,6 +4,13 @@ from rest_framework import permissions, views, viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import BaseFilterBackend
 
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+
+@login_required
+def home(request):
+    return render(request, 'core/home.html')
+
 from .models import Calendar, Event, User
 from .openai import EventyAI
 from .serializers import CalendarSerializer, EventSerializer, UserSerializer
