@@ -62,3 +62,5 @@ class EventyView(views.APIView):
     def get(self, request):
         response = EventyAI().get_response(request.GET["message"])
         return JsonResponse({"message": response.choices[0].message.content})
+
+

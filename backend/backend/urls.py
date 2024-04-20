@@ -23,6 +23,7 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions, routers
 from . import views as core_views
+from .settings import github_callback
 
 from .views import UserViewSet, EventViewSet, CalendarViewSet, EventyView
 
@@ -45,6 +46,7 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
+    path('oauth/complete/github/', github_callback, name='github_callback'),
     path("admin/", admin.site.urls),
     # path("app/", include("ace_your_day.urls")),
     path("", TemplateView.as_view(template_name="index.html")),
@@ -65,5 +67,6 @@ urlpatterns = [
     # path('', core_views.home, name='home'),
     path('login/', auth_views.LoginView.as_view(), name="login"),
     path('oauth/', include('social_django.urls', namespace='social')),
+    
     
 ]

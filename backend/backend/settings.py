@@ -19,6 +19,7 @@ from django.urls import reverse
 from djongo.operations import DatabaseOperations
 from dotenv import load_dotenv
 from urllib.parse import urlencode
+from django.http import HttpResponseBadRequest
 
 load_dotenv()
 
@@ -75,6 +76,8 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
+
+CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = "backend.urls"
 
@@ -171,22 +174,22 @@ AUTHENTICATION_BACKENDS = [
     'social_core.backends.facebook.FacebookOAuth2',
 ]
 
-SOCIALACCOUNT_PROVIDERS = {
-    "google": {
-        "SCOPE": [
-            "profile",
-            "email",
-        ],
-        "APP": {
-            "client_id": os.environ["CLIENT_ID"],
-            "secret": os.environ["CLIENT_SECRET"],
-        },
-        "AUTH_PARAMS": {
-            "access_type": "offline",
-        },
-        "FETCH_USERINFO": True,
-    },
-}
+# SOCIALACCOUNT_PROVIDERS = {
+#     "google": {
+#         "SCOPE": [
+#             "profile",
+#             "email",
+#         ],
+#         "APP": {
+#             "client_id": os.environ["CLIENT_ID"],
+#             "secret": os.environ["CLIENT_SECRET"],
+#         },
+#         "AUTH_PARAMS": {
+#             "access_type": "offline",
+#         },
+#         "FETCH_USERINFO": True,
+#     },
+# }
 
 DatabaseOperations.conditional_expression_supported_in_where_clause = (
     lambda *args, **kwargs: False
@@ -195,32 +198,33 @@ DatabaseOperations.conditional_expression_supported_in_where_clause = (
 
 SITE_ID = 1
 
-def get_github_user_info(access_token):
-    url = 'https://api.github.com/user'
-    headers = {
-        'Authorization': f'token {access_token}',
-        'Accept': 'application/json'
-    }
-    response = requests.get(url, headers=headers)
-    return response.json()
+# def get_github_user_info(access_token):
+#     url = 'https://api.github.com/user'
+#     headers = {
+#         'Authorization': f'token {access_token}',
+#         'Accept': 'application/json'
+#     }
+#     response = requests.get(url, headers=headers)
+#     return response.json()
 
-# Example usage
-github_access_token = 'YOUR_ACCESS_TOKEN'
-user_info = get_github_user_info(github_access_token)
-print(user_info)
+# # Example usage
+# github_access_token = 'YOUR_ACCESS_TOKEN'
+# user_info = get_github_user_info(github_access_token)
+# print(user_info)
 
 
 
 state = secrets.token_urlsafe(16)
-LOGIN_REDIRECT_URL = "http://localhost:3000/calendar"
+
 def github_login(request):
+    print("IN GITHUB LOGIN")
     # Generate a random state value
     state = secrets.token_urlsafe(16)
     # Store the state value in the session for later verification
     request.session['github_state'] = state
 
     # Redirect the user to GitHub for authentication
-    github_authorize_url = 'https://github.com/login/oauth/authorize'
+    github_authorize_url = 'https://github.com/oauth/complete/github'
     params = {
         'client_id': SOCIAL_AUTH_GITHUB_KEY,
         'redirect_uri': request.build_absolute_uri(reverse('github_callback')),
@@ -258,6 +262,8 @@ def github_callback(request):
 
     # Parse the response to get the access token
     data = response.json()
+    print("HERE")
+    print(data)
     access_token = data.get('access_token')
     if not access_token:
         return HttpResponseBadRequest('Missing access token')
@@ -275,21 +281,29 @@ def github_callback(request):
 
     # Process the user information as needed
     user_data = user_response.json()
+    print(user_data)
     # For example, you could save the user data to your database
     # user_data['login'], user_data['name'], etc.
 
     # Redirect the user to the desired page after successful authentication
     redirect_url = "http://localhost:3000/calendar"
-    # query_params = {
-    #     'access_token': access_token,
-    # }
+    query_params = {
+        'access_token': access_token,
+    }
     # redirect_url_with_params = f'{redirect_url}?{urlencode(query_params)}'
     # return redirect(redirect_url_with_params)
+    # return redirect(redirect_url)
+    # response = HttpResponseRedirect("http://localhost:3000/calendar")
+    # response.set_cookie('access_token', access_token, httpony=False, secure=True, path='/', samesite='Lax')
+    # return response
+    print(access_token)
+    redirect_url = f'http://localhost:3000/?access_token={access_token}'
     return redirect(redirect_url)
 
-
 # LOGIN_REDIRECT_URL = "http://localhost:8000/oauth/complete/github/?code=42c47d60179e3df495d4&state="
+# LOGIN_REDIRECT_URL = "http://localhost:3000/c"
 LOGOUT_REDIRECT_URL = "http://localhost:3000/"
+ACCOUNT_LOGIN_REDIRECT_URL = 'http://localhost:3000/calendar'
 
 
 LOGIN_URL = 'login'

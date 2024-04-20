@@ -57,14 +57,29 @@ function Navbar() {
     return csrfTokenElement ? csrfTokenElement.value : null;
   }
 
+  axios.defaults.withCredentials = true;
+  console.log(document.cookie);
+  console.log(document.cookie.split('; ').find(row=> row.startsWith('csrftoken=')).split('=')[1]);
+
+  const queryParams = new URLSearchParams(window.location.search);
+  const accessToken = queryParams.get('access_token');
+  console.log(accessToken);
+  // let accessToken = document.cookie.split('; ').find(row=> row.startsWith('access_token=')).split('=')[1];
+  // console.log(accessToken);
+  // 
+  
   let config = {
+    withCredentials: true,
     headers: {
       'accept': "application/json",
-      'authorization': 'Basic Y2FtZXJvbmJyb3duOmFjZXlvdXJkYXk=',
-      'X-CSRFToken': getCSRFToken()
+      'authorization': `Bearer ${accessToken}`,
+      'X-CSRFToken': getCSRFToken(),
     }
   }
-  let response = axios.get("/api/users", config).then((res) => console.log(res));
+  let response = axios.get("/api", config).then((res) => console.log(res));
+  // axios.get('/api/users', config)
+  //   .then(response => console.log(response))
+  //   .catch(error => console.error(error));
   const [userLoggedIn, setUserLoggedIn] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
