@@ -22,12 +22,11 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions, routers
 
-from .views import UserViewSet, EventViewSet, CalendarViewSet, EventyView
+from .views import EventViewSet, EventyView, UserViewSet
 
 router = routers.DefaultRouter()
 router.register(r"users", UserViewSet)
 router.register(r"events", EventViewSet)
-router.register(r"calendars", CalendarViewSet)
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -52,7 +51,9 @@ urlpatterns = [
     path("logout", LogoutView.as_view()),
     # path("api/", include("rest_framework.urls", namespace="rest_framework")),
     path(
-        "swagger<format>/", schema_view.without_ui(cache_timeout=0), name="schema-json"
+        "swagger<format>/",
+        schema_view.without_ui(cache_timeout=0),
+        name="schema-json",
     ),
     path(
         "swagger/",
