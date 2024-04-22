@@ -2,22 +2,19 @@ from djongo import models
 
 
 class User(models.Model):
-    _id = models.ObjectIdField()
+    _id = models.ObjectIdField(primary_key=True)
     access_token = models.CharField(max_length=1000)
 
 
-class Calendar(models.Model):
-    _id = models.ObjectIdField()
-    name = models.CharField(max_length=100)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    color = models.CharField(max_length=6)  # hex without hashtag
-
-
 class Event(models.Model):
-    _id = models.ObjectIdField()
-    name = models.CharField(max_length=100)
+    _id = models.ObjectIdField(primary_key=True)
+    title = models.CharField(max_length=100)
     start = models.DateTimeField()
     end = models.DateTimeField()
-    all_day = models.BooleanField()
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="events")
+    color = models.CharField(max_length=6, default="000000")
+    text_color = models.CharField(max_length=6, default="ffffff")
+    category = models.CharField(max_length=100)
+    description = models.TextField()
+    flexible = models.BooleanField()
+    created_at = models.DateTimeField(auto_now_add=True)
