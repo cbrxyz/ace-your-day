@@ -6,7 +6,7 @@ from .models import Event, User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["_id", "access_token"]
+        fields = "__all__"
 
 
 class EventSerializer(serializers.ModelSerializer):

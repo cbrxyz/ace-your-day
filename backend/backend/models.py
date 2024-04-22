@@ -3,7 +3,10 @@ from djongo import models
 
 class User(models.Model):
     _id = models.ObjectIdField(primary_key=True)
-    access_token = models.CharField(max_length=1000)
+    provider = models.CharField(max_length=100)
+    uid = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
+    access_token = models.CharField(max_length=100)
 
 
 class Event(models.Model):
