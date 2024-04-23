@@ -20,7 +20,7 @@ const Home = () => {
             <main>
                 <div class="content-left">
                     <h1>Ace. Your. Day.</h1>
-                    <p>blurb blurb blurby blurb</p>
+                    <p>Welcome to ACE Your Day, your ultimate solution for smart scheduling powered by cutting-edge artificial intelligence. Balancing classes, study sessions, extracurriculars, and social life can be overwhelming, but with ACE, you can effortlessly organize your busy schedule.</p>
                     <li><a href="#" class="cta">Get Started Now</a></li>
                 </div>
                 <div class="content-right">
