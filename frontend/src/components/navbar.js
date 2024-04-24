@@ -98,6 +98,7 @@ function Navbar() {
   const [preferencesDialogOpen, setPreferencesDialogOpen] = useState(false);
   const [preferences, setPreferences] = useState(() => {
     const savedPrefs = localStorage.getItem("preferences");
+    console.log("Retrieved preferences from local storage:", savedPrefs);
     return savedPrefs ? JSON.parse(savedPrefs) : { question1: "", question2: "", question3: "", question4: "" };
   });
   const navigate = useNavigate();
@@ -204,13 +205,13 @@ function Navbar() {
                     label="When do you want your day to begin?"
                     onChange={handlePreferenceChange}
                   >
-                    <MenuItem value="option1">5:00am</MenuItem>
-                    <MenuItem value="option2">6:00am</MenuItem>
-                    <MenuItem value="option3">7:00am</MenuItem>
-                    <MenuItem value="option4">8:00am</MenuItem>
-                    <MenuItem value="option5">9:00am</MenuItem>
-                    <MenuItem value="option6">10:00am</MenuItem>
-                    <MenuItem value="option7">11:00am</MenuItem>
+                    <MenuItem value="5:00am">5:00am</MenuItem>
+                    <MenuItem value="6:00am">6:00am</MenuItem>
+                    <MenuItem value="7:00am">7:00am</MenuItem>
+                    <MenuItem value="8:00am">8:00am</MenuItem>
+                    <MenuItem value="9:00am">9:00am</MenuItem>
+                    <MenuItem value="10:00am">10:00am</MenuItem>
+                    <MenuItem value="11:00am">11:00am</MenuItem>
                   </Select>
                 </FormControl>
                 <FormControl fullWidth margin="normal">
@@ -221,13 +222,13 @@ function Navbar() {
                     label="When do you want your day to end?"
                     onChange={handlePreferenceChange}
                   >
-                    <MenuItem value="option1">5:00pm</MenuItem>
-                    <MenuItem value="option2">6:00pm</MenuItem>
-                    <MenuItem value="option3">7:00pm</MenuItem>
-                    <MenuItem value="option4">8:00pm</MenuItem>
-                    <MenuItem value="option5">9:00pm</MenuItem>
-                    <MenuItem value="option6">10:00pm</MenuItem>
-                    <MenuItem value="option7">11:00pm</MenuItem>
+                    <MenuItem value="5:00pm">5:00pm</MenuItem>
+                    <MenuItem value="6:00pm">6:00pm</MenuItem>
+                    <MenuItem value="7:00pm">7:00pm</MenuItem>
+                    <MenuItem value="8:00pm">8:00pm</MenuItem>
+                    <MenuItem value="9:00pm">9:00pm</MenuItem>
+                    <MenuItem value="10:00pm">10:00pm</MenuItem>
+                    <MenuItem value="11:00pm">11:00pm</MenuItem>
 
                   </Select>
                 </FormControl>
@@ -239,8 +240,8 @@ function Navbar() {
                     label="Question 3"
                     onChange={handlePreferenceChange}
                   >
-                    <MenuItem value="option1">group similar events</MenuItem>
-                    <MenuItem value="option2">spread similar events</MenuItem>
+                    <MenuItem value="group similar events">group similar events</MenuItem>
+                    <MenuItem value="spread similar events">spread similar events</MenuItem>
                   </Select>
                 </FormControl>
                 <FormControl fullWidth margin="normal">
@@ -251,8 +252,8 @@ function Navbar() {
                     label="Question 4"
                     onChange={handlePreferenceChange}
                   >
-                    <MenuItem value="option1">group my free time</MenuItem>
-                    <MenuItem value="option2">spread my free time</MenuItem>
+                    <MenuItem value="group my free time">group my free time</MenuItem>
+                    <MenuItem value="spread my free time">spread my free time</MenuItem>
                   </Select>
                 </FormControl>
               </DialogContent>
