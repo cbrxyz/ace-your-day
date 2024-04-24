@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect} from "react";
+import React, { useEffect, useState, useRef } from "react";
 import './calendar.css';
 
 //FullCalendar imports
@@ -14,12 +14,14 @@ import AddEventDialog from '../addEvent'
 import EventDesDialog from '../eventDescription'
 import { InputLabel, TextField} from '@mui/material';
 import OptimizeDialog from '../optimize'
+import Api from '../Api'
 
 //Other imports
 import colors from '../event-utils'
 
 
-export default function Calendar() {
+export default function Calendar(){
+    const [events, setEvents] = useState([]);
     const [weekendsVisible, setWeekendsVisible] = useState(true)
     const [currentEvents, setCurrentEvents] = useState([])
     const [formData, setFormatData] = useState({
@@ -73,6 +75,9 @@ export default function Calendar() {
     }
 
     function deleteEvent(){
+        const csrftoken = getCookie('csrftoken');
+        const api = new Api(csrftoken);
+        api.deleteEvent(clickInfo.event.id).then((res) => console.log(res));
         clickInfo.event.remove();
         setOpenDes(false);
     }
@@ -113,15 +118,62 @@ export default function Calendar() {
 
     }
 
+    async function getEvents() {
+      const api = new Api();
+      let outputted = [];
+      let events = await api.getEvents();
+      for (let i = 0; i < events.data.length; i++) {
+          let event = events.data[i];
+          let id = event._id;
+          let title = event.title;
+          let start = event.start;
+          let end = event.end;
+          let color = event.color;
+          let textColor = event.text_color;
+          let category = event.category;
+          let description = event.description;
+          let flex = event.flexible;
+          outputted.push({
+              id: id,
+              title: title,
+              start: start,
+              end: end,
+              color: color,
+              textColor: textColor,
+              extendedProps: {
+                  category: category,
+                  description: description,
+                  flex: flex
+              }
+          });
+      }
+      return outputted;
+    }
+
+    useEffect(() => {
+        async function fetchEvents() {
+            let events = await getEvents();
+            setEvents(events);
+        }
+
+        fetchEvents();
+    }, []);
+
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+
     function handleSubmit(event){
         event.preventDefault();
         const {title, start, end, color, textColor, category, description, flex} = formData;
-        console.log(formData.color);
         if (title && start && end) {
             if(start < end){
-                const calendarApi = calendarRef.current.getApi()
+                const calendarApi = calendarRef.current.getApi();
+                const eventId = createEventId();
                 calendarApi.addEvent({
-                    id: createEventId(),
+                    id: eventId,
                     title,
                     start,
                     end,
@@ -133,6 +185,21 @@ export default function Calendar() {
                         flex
                     }
                 });
+                // const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                const csrftoken = getCookie('csrftoken');
+                const api = new Api(csrftoken);
+                api.addEvent({
+                    _id: eventId,
+                    title: title,
+                    start: start,
+                    end: end,
+                    color: color,
+                    text_color: textColor,
+                    category: category,
+                    description: description,
+                    flexible: flex,
+                    owner: "6626efb40ee328dfba01fa3c"
+                }).then((res) => console.log(res));
 
                 setFormatData({
                     title: '',
@@ -152,13 +219,9 @@ export default function Calendar() {
 
         } else {
 
-            alert("d;lfkjs")
+            alert("d;lfkjsjsk9332309d")
         }
-
-
     }
-
-
 
     return (
         <div className = 'calendar'>
@@ -195,7 +258,7 @@ export default function Calendar() {
                     selectMirror={true}
                     dayMaxEvents={true}
                     weekends={weekendsVisible}
-                    initialEvents={INITIAL_EVENTS} // or use 'events' setting to fetch from feed
+                    events={events} // or use 'events' setting to fetch from feed
                     select={handleDateSelect}
                     eventContent={renderEventContent} // custom render function
                     eventClick={handleEventClick} // defined in function above

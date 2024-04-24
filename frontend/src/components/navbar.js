@@ -52,14 +52,34 @@ function Navbar() {
   const location = useLocation();
   console.log('Current path:', location.pathname);
 
+  function getCSRFToken() {
+    const csrfTokenElement = document.querySelector('input[name="csrfmiddlewaretoken"]');
+    return csrfTokenElement ? csrfTokenElement.value : null;
+  }
+
+  axios.defaults.withCredentials = true;
+  console.log(document.cookie);
+  // console.log(document.cookie.split('; ').find(row=> row.startsWith('csrftoken=')).split('=')[1]);
+
+  const queryParams = new URLSearchParams(window.location.search);
+  const accessToken = queryParams.get('access_token');
+  console.log(accessToken);
+  // let accessToken = document.cookie.split('; ').find(row=> row.startsWith('access_token=')).split('=')[1];
+  // console.log(accessToken);
+  //
+
   let config = {
+    withCredentials: true,
     headers: {
       'accept': "application/json",
-      'authorization': 'Basic Y2FtZXJvbmJyb3duOmFjZXlvdXJkYXk=',
-      'X-CSRFToken': 'FnXyPQxZOq2sp9deXnaYnofChj8tl96tyuc1Cq8NjlENxD73x5fbhyXOV9ccbmmp'
+      'authorization': `Bearer ${accessToken}`,
+      'X-CSRFToken': getCSRFToken(),
     }
   }
   let response = axios.get("/api/users", config).then((res) => console.log(res));
+  // axios.get('/api/users', config)
+  //   .then(response => console.log(response))
+  //   .catch(error => console.error(error));
   const [userLoggedIn, setUserLoggedIn] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -68,7 +88,7 @@ function Navbar() {
     const savedPrefs = localStorage.getItem("preferences");
     return savedPrefs ? JSON.parse(savedPrefs) : { question1: "", question2: "", question3: "", question4: "" };
   });
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   useEffect(() => {
     localStorage.setItem("loggedIn", userLoggedIn);
@@ -101,7 +121,7 @@ function Navbar() {
   const handlePreferenceChange = (event) => {
     const newPreferences = { ...preferences, [event.target.name]: event.target.value };
     setPreferences(newPreferences);
-  
+
   };
 
   return (
@@ -136,7 +156,7 @@ function Navbar() {
               <MenuItem onClick={handlePreferencesOpen}>Preferences</MenuItem>
               <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
-            <Dialog 
+            <Dialog
               open={preferencesDialogOpen}
               onClose={handlePreferencesClose}
               sx={{
@@ -184,7 +204,7 @@ function Navbar() {
                   </Select>
                 </FormControl>
                 <FormControl fullWidth margin="normal">
-                  <InputLabel>I want to..</InputLabel> 
+                  <InputLabel>I want to..</InputLabel>
                   <Select
                     name="question3"
                     value={preferences.question3}
@@ -196,7 +216,7 @@ function Navbar() {
                   </Select>
                 </FormControl>
                 <FormControl fullWidth margin="normal">
-                  <InputLabel>I want to..</InputLabel> 
+                  <InputLabel>I want to..</InputLabel>
                   <Select
                     name="question4"
                     value={preferences.question4}

@@ -1,6 +1,8 @@
 import coreapi
 from bson import ObjectId
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from django.shortcuts import render
 from rest_framework import permissions, views, viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import BaseFilterBackend
@@ -8,6 +10,11 @@ from rest_framework.filters import BaseFilterBackend
 from .models import Event, User
 from .openai import EventyAI
 from .serializers import EventSerializer, UserSerializer
+
+
+@login_required
+def home(request):
+    return render(request, "core/home.html")
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -28,7 +35,7 @@ class UserViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, pk=None):
         try:
             return JsonResponse(
-                self.get_serializer(User.objects.get(pk=ObjectId(pk))).data
+                self.get_serializer(User.objects.get(pk=ObjectId(pk))).data,
             )
         except User.DoesNotExist:
             return JsonResponse({"success": False}, status=404)
@@ -36,7 +43,8 @@ class UserViewSet(viewsets.ModelViewSet):
     def update(self, request, pk=None):
         try:
             serializer = self.get_serializer(
-                User.objects.get(pk=ObjectId(pk)), data=request.data
+                User.objects.get(pk=ObjectId(pk)),
+                data=request.data,
             )
         except User.DoesNotExist:
             return JsonResponse({"success": False}, status=404)
@@ -47,7 +55,9 @@ class UserViewSet(viewsets.ModelViewSet):
     def partial_update(self, request, pk=None):
         try:
             serializer = self.get_serializer(
-                User.objects.get(pk=ObjectId(pk)), data=request.data, partial=True
+                User.objects.get(pk=ObjectId(pk)),
+                data=request.data,
+                partial=True,
             )
         except User.DoesNotExist:
             return JsonResponse({"success": False}, status=404)
@@ -96,7 +106,8 @@ class EventViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, pk=None):
         try:
             return JsonResponse(
-                self.get_serializer(Event.objects.get(pk=ObjectId(pk))).data, safe=False
+                self.get_serializer(Event.objects.get(pk=ObjectId(pk))).data,
+                safe=False,
             )
         except Event.DoesNotExist:
             return JsonResponse({"success": False}, status=404)
@@ -104,7 +115,8 @@ class EventViewSet(viewsets.ModelViewSet):
     def update(self, request, pk=None):
         # If owner in request data, ensure it is ObjectId
         serializer = self.get_serializer(
-            Event.objects.get(pk=ObjectId(pk)), data=request.data
+            Event.objects.get(pk=ObjectId(pk)),
+            data=request.data,
         )
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -113,7 +125,9 @@ class EventViewSet(viewsets.ModelViewSet):
     def partial_update(self, request, pk=None):
         try:
             serializer = self.get_serializer(
-                Event.objects.get(pk=ObjectId(pk)), data=request.data, partial=True
+                Event.objects.get(pk=ObjectId(pk)),
+                data=request.data,
+                partial=True,
             )
         except Event.DoesNotExist:
             return JsonResponse({"success": False}, status=404)

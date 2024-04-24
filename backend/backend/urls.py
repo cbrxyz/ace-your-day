@@ -15,12 +15,13 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.contrib.auth.views import LogoutView
+from django.contrib.auth import views as auth_views
 from django.urls import include, path
 from django.views.generic import TemplateView
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions, routers
+from .settings import github_callback
 
 from .views import EventViewSet, EventyView, UserViewSet
 
@@ -42,13 +43,14 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
+    path("oauth/complete/github/", github_callback, name="github_callback"),
     path("admin/", admin.site.urls),
     # path("app/", include("ace_your_day.urls")),
     path("", TemplateView.as_view(template_name="index.html")),
     path("api/", include(router.urls)),
     path("api/eventy", EventyView.as_view()),
     path("accounts/", include("allauth.urls")),
-    path("logout", LogoutView.as_view()),
+    path("logout", auth_views.LogoutView.as_view()),
     # path("api/", include("rest_framework.urls", namespace="rest_framework")),
     path(
         "swagger<format>/",
@@ -61,4 +63,7 @@ urlpatterns = [
         name="schema-swagger-ui",
     ),
     path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
+    # path('', core_views.home, name='home'),
+    path("login/", auth_views.LoginView.as_view(), name="login"),
+    path("oauth/", include("social_django.urls", namespace="social")),
 ]
