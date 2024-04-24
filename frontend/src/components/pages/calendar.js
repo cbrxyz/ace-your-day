@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect} from "react";
 import './calendar.css';
 
 //FullCalendar imports
@@ -12,10 +12,11 @@ import { INITIAL_EVENTS, createEventId } from "../event-utils";
 //MUI Imports
 import AddEventDialog from '../addEvent'
 import EventDesDialog from '../eventDescription'
+import { InputLabel, TextField} from '@mui/material';
+import OptimizeDialog from '../optimize'
 
 //Other imports
 import colors from '../event-utils'
-import axios from "axios";
 
 
 export default function Calendar() {
@@ -36,6 +37,8 @@ export default function Calendar() {
     const [showAdd, openShowAdd] = useState(false)
     const [openDes, setOpenDes] = useState(false);
     const [clickInfo, setClickInfo] = useState(null);
+    const [openOpt, setOpenOpt] = useState(false);
+
 
 
 
@@ -43,6 +46,7 @@ export default function Calendar() {
 
     function handleWeekendsToggle(){
         setWeekendsVisible(!weekendsVisible)
+        setOpenOpt(true);
     }
 
     function handleDateSelect(selectInfo){
@@ -167,6 +171,8 @@ export default function Calendar() {
                 handleSubmit={handleSubmit}
                 showAdd={showAdd}
                 setShowAdd={openShowAdd}
+                openOpt={openOpt}
+                setOpt={setOpenOpt}
             />
             <EventDesDialog
                 open={openDes}
@@ -214,9 +220,24 @@ function renderEventContent(eventInfo){
     )
 }
 
-function Sidebar({weekendsVisible, handleWeekendsToggle, currentEvents, formData, handleInputChange, handleSubmit, showAdd, setShowAdd}) {
-    // let response = axios.get("/api/users/").then((res) => console.log(res));
-    // TODO: fix axios request
+function Sidebar({weekendsVisible, handleWeekendsToggle, currentEvents, formData, handleInputChange, handleSubmit, showAdd, setShowAdd, showOpt, setOpt}) {
+    const [chosenDate, setChosenDate] = useState('');
+
+    useEffect(() => {
+        const storedDate = localStorage.getItem("opt");
+        console.log("Stored Date:", storedDate);
+        if(storedDate) {
+            setChosenDate(storedDate);
+        }
+    }, []);
+
+    const handleDateChange = (event) => {
+        const newDate = event.target.value;
+        console.log("New Date Selected:", newDate);
+        setChosenDate(newDate);
+        localStorage.setItem("opt", newDate);
+    }
+
     return (
         <div className="calendar-sidebar">
             <div className="calendar-sidebar-section">
@@ -228,6 +249,26 @@ function Sidebar({weekendsVisible, handleWeekendsToggle, currentEvents, formData
                     <li>hi</li>
                 </ul>
             </div>
+            <div className="calendar-sidebar-section">
+                <InputLabel>Select a Day to Optimize</InputLabel>
+                        <TextField
+                            required
+                            margin="dense"
+                            id="opt"
+                            name="opt"
+                            type="date"
+                            fullWidth
+                            variant="standard"
+                            value={chosenDate}
+                            onChange={handleDateChange}
+                        />
+                <OptimizeDialog
+                    openDialog={showOpt}
+                    setOpenSelect={setOpt}
+                    date={chosenDate}
+                />
+            </div>
+
             <div className="calendar-sidebar-section">
                 <label>
                     <input
