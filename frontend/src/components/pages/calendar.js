@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import './calendar.css';
 
 //FullCalendar imports
@@ -12,13 +12,15 @@ import { INITIAL_EVENTS, createEventId } from "../event-utils";
 //MUI Imports
 import AddEventDialog from '../addEvent'
 import EventDesDialog from '../eventDescription'
+import Api from '../Api'
 
 //Other imports
 import colors from '../event-utils'
 import axios from "axios";
 
 
-export default function Calendar() {
+export default function Calendar(){
+    const [events, setEvents] = useState([]);
     const [weekendsVisible, setWeekendsVisible] = useState(true)
     const [currentEvents, setCurrentEvents] = useState([])
     const [formData, setFormatData] = useState({
@@ -109,6 +111,47 @@ export default function Calendar() {
 
     }
 
+    async function getEvents() {
+      const api = new Api();
+      let outputted = [];
+      let events = await api.getEvents();
+      for (let i = 0; i < events.data.length; i++) {
+          let event = events.data[i];
+          let id = event._id;
+          let title = event.title;
+          let start = event.start;
+          let end = event.end;
+          let color = event.color;
+          let textColor = event.text_color;
+          let category = event.category;
+          let description = event.description;
+          let flex = event.flexible;
+          outputted.push({
+              id: id,
+              title: title,
+              start: start,
+              end: end,
+              color: color,
+              textColor: textColor,
+              extendedProps: {
+                  category: category,
+                  description: description,
+                  flex: flex
+              }
+          });
+      }
+      return outputted;
+    }
+
+    useEffect(() => {
+        async function fetchEvents() {
+            let events = await getEvents();
+            setEvents(events);
+        }
+
+        fetchEvents();
+    }, []);
+
     function handleSubmit(event){
         event.preventDefault();
         const {title, start, end, color, textColor, category, description, flex} = formData;
@@ -150,11 +193,7 @@ export default function Calendar() {
 
             alert("d;lfkjs")
         }
-
-
     }
-
-
 
     return (
         <div className = 'calendar'>
@@ -189,7 +228,7 @@ export default function Calendar() {
                     selectMirror={true}
                     dayMaxEvents={true}
                     weekends={weekendsVisible}
-                    initialEvents={INITIAL_EVENTS} // or use 'events' setting to fetch from feed
+                    events={events} // or use 'events' setting to fetch from feed
                     select={handleDateSelect}
                     eventContent={renderEventContent} // custom render function
                     eventClick={handleEventClick} // defined in function above
@@ -215,7 +254,7 @@ function renderEventContent(eventInfo){
 }
 
 function Sidebar({weekendsVisible, handleWeekendsToggle, currentEvents, formData, handleInputChange, handleSubmit, showAdd, setShowAdd}) {
-    // let response = axios.get("/api/users/").then((res) => console.log(res));
+    // let response = axios.get("http://localhost:8000/api/users/").then((res) => console.log(res));
     // TODO: fix axios request
     return (
         <div className="calendar-sidebar">
