@@ -15,10 +15,8 @@ from pathlib import Path
 import secrets
 import requests
 from django.shortcuts import redirect
-from django.urls import reverse
 from djongo.operations import DatabaseOperations
 from dotenv import load_dotenv
-from urllib.parse import urlencode
 from django.http import HttpResponseBadRequest
 
 load_dotenv()
@@ -37,6 +35,7 @@ OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+CORS_ORIGIN_ALLOW_ALL = True
 ALLOWED_HOSTS = []
 
 
@@ -57,7 +56,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "backend",
     "drf_yasg",
-    "social_django"
+    "social_django",
 ]
 
 MIDDLEWARE = [
@@ -70,7 +69,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
     "corsheaders.middleware.CorsMiddleware",
-    'social_django.middleware.SocialAuthExceptionMiddleware',
+    "social_django.middleware.SocialAuthExceptionMiddleware",
 ]
 
 CORS_ALLOWED_ORIGINS = [
@@ -94,8 +93,8 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                'social_django.context_processors.backends',
-                'social_django.context_processors.login_redirect',
+                "social_django.context_processors.backends",
+                "social_django.context_processors.login_redirect",
             ],
         },
     },
@@ -159,7 +158,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -169,9 +168,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
-    'social_core.backends.github.GithubOAuth2',
-    'social_core.backends.twitter.TwitterOAuth',
-    'social_core.backends.facebook.FacebookOAuth2',
+    "social_core.backends.github.GithubOAuth2",
+    "social_core.backends.twitter.TwitterOAuth",
+    "social_core.backends.facebook.FacebookOAuth2",
 ]
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -182,7 +181,6 @@ SOCIALACCOUNT_PROVIDERS = {
         ],
         "CLIENT_ID": os.environ["CLIENT_ID"],
         "SECRET": os.environ["CLIENT_SECRET"],
-        
         # "AUTH_PARAMS": {
         #     "access_type": "offline",
         # },
@@ -212,71 +210,68 @@ SITE_ID = 1
 # print(user_info)
 
 
-
 state = secrets.token_urlsafe(16)
+
 
 def github_login(request):
     print("IN GITHUB LOGIN")
     # Generate a random state value
     state = secrets.token_urlsafe(16)
     # Store the state value in the session for later verification
-    request.session['github_state'] = state
+    request.session["github_state"] = state
 
     # Redirect the user to GitHub for authentication
-    github_authorize_url = 'https://github.com/oauth/complete/github'
+    github_authorize_url = "https://github.com/oauth/complete/github"
     params = {
-        'client_id': SOCIAL_AUTH_GITHUB_KEY,
+        "client_id": SOCIAL_AUTH_GITHUB_KEY,
         # 'redirect_uri': request.build_absolute_uri(reverse('github_callback')),
-        'state': state,
+        "state": state,
     }
     # print(request.build_absolute_uri(reverse('github_callback')))
     LOGIN_REDIRECT_URL = f"{github_authorize_url}?{'&'.join([f'{key}={value}' for key, value in params.items()])}"
     return redirect(LOGIN_REDIRECT_URL)
 
+
 def github_callback(request):
     # Verify the state parameter
-    state = request.GET.get('state')
-    if state != request.session.get('github_state'):
-        return HttpResponseBadRequest('Invalid state parameter')
-    
-    code = request.GET.get('code')
+    state = request.GET.get("state")
+    if state != request.session.get("github_state"):
+        return HttpResponseBadRequest("Invalid state parameter")
+
+    code = request.GET.get("code")
     if not code:
-        return HttpResponseBadRequest('Missing authorization code')
+        return HttpResponseBadRequest("Missing authorization code")
 
     # Make a POST request to GitHub to exchange the code for an access token
-    token_url = 'https://github.com/login/oauth/access_token'
+    token_url = "https://github.com/login/oauth/access_token"
     params = {
-        'client_id': SOCIAL_AUTH_GITHUB_KEY,
-        'client_secret': SOCIAL_AUTH_GITHUB_SECRET,
-        'code': code,
+        "client_id": SOCIAL_AUTH_GITHUB_KEY,
+        "client_secret": SOCIAL_AUTH_GITHUB_SECRET,
+        "code": code,
         # 'redirect_uri': request.build_absolute_uri(reverse('github_callback')),
-        'state': state,
+        "state": state,
     }
-    headers = {
-        'Accept': 'application/json'
-    }
+    headers = {"Accept": "application/json"}
     response = requests.post(token_url, params=params, headers=headers)
     if response.status_code != 200:
-        return HttpResponseBadRequest('Failed to exchange code for access token')
+        return HttpResponseBadRequest("Failed to exchange code for access token")
 
     # Parse the response to get the access token
     data = response.json()
     print("HERE")
     print(data)
-    access_token = data.get('access_token')
+    access_token = data.get("access_token")
     if not access_token:
-        return HttpResponseBadRequest('Missing access token')
+        return HttpResponseBadRequest("Missing access token")
 
     # Use the access token to make API calls to GitHub
     # For example, you can use it to get user information
     # See: https://docs.github.com/en/rest/reference/users#get-the-authenticated-user
-    user_url = 'https://api.github.com/user'
-    headers = {
-        'Authorization': f'Bearer {access_token}'
-    }
+    user_url = "https://api.github.com/user"
+    headers = {"Authorization": f"Bearer {access_token}"}
     user_response = requests.get(user_url, headers=headers)
     if user_response.status_code != 200:
-        return HttpResponseBadRequest('Failed to get user information')
+        return HttpResponseBadRequest("Failed to get user information")
 
     # Process the user information as needed
     user_data = user_response.json()
@@ -286,9 +281,9 @@ def github_callback(request):
 
     # Redirect the user to the desired page after successful authentication
     redirect_url = "http://localhost:3000/calendar"
-    query_params = {
-        'access_token': access_token,
-    }
+    # query_params = {
+    #     "access_token": access_token,
+    # }
     # redirect_url_with_params = f'{redirect_url}?{urlencode(query_params)}'
     # return redirect(redirect_url_with_params)
     # return redirect(redirect_url)
@@ -296,20 +291,21 @@ def github_callback(request):
     # response.set_cookie('access_token', access_token, httpony=False, secure=True, path='/', samesite='Lax')
     # return response
     print(access_token)
-    redirect_url = f'http://localhost:3000/calendar?access_token={access_token}'
+    redirect_url = f"http://localhost:3000/calendar?access_token={access_token}"
     return redirect(redirect_url)
+
 
 # LOGIN_REDIRECT_URL = "http://localhost:8000/oauth/complete/github/?code=42c47d60179e3df495d4&state="
 # LOGIN_REDIRECT_URL = "http://localhost:3000/c"
 LOGOUT_REDIRECT_URL = "http://localhost:3000/"
-ACCOUNT_LOGIN_REDIRECT_URL = 'http://localhost:3000/calendar'
+ACCOUNT_LOGIN_REDIRECT_URL = "http://localhost:3000/calendar"
 
 
-LOGIN_URL = 'login'
+LOGIN_URL = "login"
 # LOGOUT_URL = 'logout'
 
 
-SOCIAL_AUTH_GITHUB_KEY = '42c47d60179e3df495d4'
-SOCIAL_AUTH_GITHUB_SECRET = '46eb09b5366549b47035b9eb9fdc52f14521a082'
+SOCIAL_AUTH_GITHUB_KEY = "42c47d60179e3df495d4"
+SOCIAL_AUTH_GITHUB_SECRET = "46eb09b5366549b47035b9eb9fdc52f14521a082"
 
 SOCIALACCOUNT_AUTO_SIGNUP = True
