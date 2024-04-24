@@ -71,6 +71,9 @@ export default function Calendar(){
     }
 
     function deleteEvent(){
+        const csrftoken = getCookie('csrftoken');
+        const api = new Api(csrftoken);
+        api.deleteEvent(clickInfo.event.id).then((res) => console.log(res));
         clickInfo.event.remove();
         setOpenDes(false);
     }
@@ -152,15 +155,21 @@ export default function Calendar(){
         fetchEvents();
     }, []);
 
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+
     function handleSubmit(event){
         event.preventDefault();
         const {title, start, end, color, textColor, category, description, flex} = formData;
-        console.log(formData.color);
         if (title && start && end) {
             if(start < end){
-                const calendarApi = calendarRef.current.getApi()
+                const calendarApi = calendarRef.current.getApi();
+                const eventId = createEventId();
                 calendarApi.addEvent({
-                    id: createEventId(),
+                    id: eventId,
                     title,
                     start,
                     end,
@@ -172,6 +181,21 @@ export default function Calendar(){
                         flex
                     }
                 });
+                // const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                const csrftoken = getCookie('csrftoken');
+                const api = new Api(csrftoken);
+                api.addEvent({
+                    _id: eventId,
+                    title: title,
+                    start: start,
+                    end: end,
+                    color: color,
+                    text_color: textColor,
+                    category: category,
+                    description: description,
+                    flexible: flex,
+                    owner: "6626efb40ee328dfba01fa3c"
+                }).then((res) => console.log(res));
 
                 setFormatData({
                     title: '',
@@ -191,7 +215,7 @@ export default function Calendar(){
 
         } else {
 
-            alert("d;lfkjs")
+            alert("d;lfkjsjsk9332309d")
         }
     }
 

@@ -8,9 +8,25 @@
 // - deleteEvent
 
 export default class Api {
-    constructor() {
+    constructor(csrftoken) {
         this.axios = require('axios');
         this.baseUrl = "http://localhost:8000/api";
+        this.csrftoken = csrftoken;
+    }
+
+    getHeaders() {
+      return {
+        'accept': "application/json",
+        'Content-Type': 'application/json',
+        'X-CSRFToken': this.csrftoken,
+      }
+    }
+
+    getConfig() {
+      return {
+        withCredentials: true,
+        headers: this.getHeaders(),
+      }
     }
 
     async getUsers() {
@@ -28,10 +44,12 @@ export default class Api {
     }
 
     async addEvent(event) {
-        return this.axios.post(this.baseUrl + "/events/", event);
+        let config = this.getConfig();
+        return this.axios.post(this.baseUrl + "/events/", event, config);
     }
 
     async deleteEvent(eventId) {
-        return this.axios.delete(this.baseUrl + "/events/" + eventId + "/");
+        let config = this.getConfig();
+        return this.axios.delete(this.baseUrl + "/events/" + eventId + "/", config);
     }
 }
