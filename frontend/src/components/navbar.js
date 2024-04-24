@@ -5,6 +5,19 @@ import logo from "./images/Logo.png";
 import profile from "./images/profile.png";
 import { ThemeProvider, createTheme, styled } from '@mui/material/styles';
 import axios from 'axios';
+import Cookies from 'js-cookie';
+
+// Setup CSRF tokens for Axios
+axios.defaults.xsrfCookieName = 'csrftoken';
+axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+
+axios.interceptors.request.use(function (config) {
+    const token = Cookies.get('csrftoken');
+    config.headers['X-CSRFToken'] = token;
+    return config;
+}, function (error) {
+    return Promise.reject(error);
+});
 
 const theme = createTheme();
 
@@ -28,7 +41,6 @@ const TitleContainer = styled(Typography)({
 const ButtonWrapper = styled('div')({
   marginLeft: 'auto',
 });
-
 
 const GoogleLoginButton = styled(MuiLink)({
   display: 'flex',
@@ -76,7 +88,7 @@ function Navbar() {
       'X-CSRFToken': getCSRFToken(),
     }
   }
-  let response = axios.get("/api/users", config).then((res) => console.log(res));
+  // let response = axios.get("/api/users", config).then((res) => console.log(res));
   // axios.get('/api/users', config)
   //   .then(response => console.log(response))
   //   .catch(error => console.error(error));
@@ -102,12 +114,28 @@ function Navbar() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  
+  const handleLogout = async () => {
+    try {
+        // Call the backend to log out
+        await axios.post('http://localhost:8000/logout');
+        console.log("Logged out from backend");
+    } catch (error) {
+        console.error("Error logging out from backend:", error);
+    }
 
-  const handleLogout = () => {
-    setUserLoggedIn(false)
-    navigate('/');
+    // Clear client-side storage
+    Cookies.remove('access_token');  // Assuming this is your OAuth token
+    Cookies.remove('csrftoken');  // CSRF token might as well be cleared
+    localStorage.removeItem("userSession");
+    sessionStorage.clear();
+
+    setUserLoggedIn(false);
     handleClose();
-  };
+    navigate('/');
+};
+
+
 
   const handlePreferencesOpen = () => {
     setPreferencesDialogOpen(true);
@@ -139,12 +167,12 @@ function Navbar() {
             console.log("user is not logged in yet"),
             <GoogleLoginButton
               component={Link}
-              to="http://127.0.0.1:8000/accounts/google/login/"
+              to="http://localhost:8000/login"
             >
               <GoogleIconWrapper>
-                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google icon" style={{ width: '20px' }} />
-              </GoogleIconWrapper>
-              <Typography variant="button" style={{ fontWeight: 'bold' }}>Sign in with Google</Typography>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Font_Awesome_5_brands_github-square.svg/800px-Font_Awesome_5_brands_github-square.svg.png" alt="Google icon" style={{ width: '20px' }} />
+            </GoogleIconWrapper>
+              <Typography variant="button" style={{ fontWeight: 'bold' }}>Sign in with Github</Typography>
             </GoogleLoginButton>
           ) : (console.log(userLoggedIn),console.log("user is logged in"), <>
             <LogoImage onClick={handleMenu} src={profile} alt="Profile" height="40" />

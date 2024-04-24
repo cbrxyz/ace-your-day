@@ -18,6 +18,9 @@ from django.shortcuts import redirect
 from djongo.operations import DatabaseOperations
 from dotenv import load_dotenv
 from django.http import HttpResponseBadRequest
+from django.contrib.auth import logout
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 
 load_dotenv()
 
@@ -34,7 +37,10 @@ OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+]
+CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
 ALLOWED_HOSTS = []
 
@@ -215,7 +221,7 @@ def github_login(request):
     request.session["github_state"] = state
 
     # Redirect the user to GitHub for authentication
-    github_authorize_url = "https://github.com/oauth/complete/github"
+    github_authorize_url = "http://localhost:8000/oauth/complete/github" # i think this is the correct one
     params = {
         "client_id": SOCIAL_AUTH_GITHUB_KEY,
         # 'redirect_uri': request.build_absolute_uri(reverse('github_callback')),
@@ -288,6 +294,13 @@ def github_callback(request):
     redirect_url = f"http://localhost:3000/calendar?access_token={access_token}"
     return redirect(redirect_url)
 
+@api_view(['POST'])
+def logout_view(request):
+    logout(request)  # This effectively clears the session
+    response = Response({"success": "Logged out successfully"}, status=200)
+    response.delete_cookie('sessionid')  # Adjust the cookie name based on your config
+    response.delete_cookie('access_token')
+    return response
 
 # LOGIN_REDIRECT_URL = "http://localhost:8000/oauth/complete/github/?code=42c47d60179e3df495d4&state="
 # LOGIN_REDIRECT_URL = "http://localhost:3000/c"
