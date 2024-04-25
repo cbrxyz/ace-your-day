@@ -17,7 +17,6 @@ import OptimizeDialog from '../optimize'
 
 //Other imports
 import colors from '../event-utils'
-import DatePicker from "react-datepicker";
 
 
 export default function Calendar() {
