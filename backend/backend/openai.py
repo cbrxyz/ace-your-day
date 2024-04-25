@@ -12,12 +12,12 @@ class EventyAI(OpenAI):
             messages=[
                 {
                     "role": "system",
-                    "content": "Please optimize the following schedule and return it in the same format. Events with flexible = true can be moved, but events with flexible=false cannot. My preferences are to start my day at 8AM and end at 10PM, group events of a similar category together, and group free time as much as possible.  If events can be better scheduled by splitting them to meet my preferences, please do so:",
+                    "content": "Please optimize the following schedule and return it an HTML table format, but do not format it in a codeblock. Literally just output the raw HTML. Events with flexible = true can be moved, but events with flexible=false cannot. You can only schedule events that I provide to you. DO NOT MAKE UP EVENTS.",
                 },
                 {
                     "role": "user",
                     "content": message,
                 },
             ],
-            model="gpt-3.5-turbo",
+            model="gpt-4-turbo",
         )

@@ -1,6 +1,7 @@
 import { createEventInstance } from "@fullcalendar/core/internal"
 
-let eventGuid = 0
+const ObjectId = (m = Math, d = Date, h = 16, s = s => m.floor(s).toString(h)) =>
+    s(d.now() / 1000) + ' '.repeat(h).replace(/./g, () => s(m.random() * h))
 let todayStr = new Date().toISOString().replace(/T.*$/, '')
 
 export const INITIAL_EVENTS = [
@@ -77,11 +78,11 @@ export const INITIAL_EVENTS = [
         textColor: "purple",
         description: "Leisure/Relaxation",
         flexible: true
-    }   
+    }
 ]
 
 export function createEventId(){
-    return String(eventGuid++)
+    return ObjectId();
 }
 
 

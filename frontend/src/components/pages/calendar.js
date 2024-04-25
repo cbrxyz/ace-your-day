@@ -236,6 +236,7 @@ export default function Calendar(){
                 setShowAdd={openShowAdd}
                 openOpt={openOpt}
                 setOpt={setOpenOpt}
+                events={events}
             />
             <EventDesDialog
                 open={openDes}
@@ -283,7 +284,7 @@ function renderEventContent(eventInfo){
     )
 }
 
-function Sidebar({weekendsVisible, handleWeekendsToggle, currentEvents, formData, handleInputChange, handleSubmit, showAdd, setShowAdd, showOpt, setOpt}) {
+function Sidebar({weekendsVisible, handleWeekendsToggle, currentEvents, formData, handleInputChange, handleSubmit, showAdd, setShowAdd, showOpt, setOpt, events}) {
     const [chosenDate, setChosenDate] = useState('');
 
     useEffect(() => {
@@ -301,6 +302,12 @@ function Sidebar({weekendsVisible, handleWeekendsToggle, currentEvents, formData
         localStorage.setItem("opt", newDate);
     }
 
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+
     return (
         <div className="calendar-sidebar">
             <div className="calendar-sidebar-section">
@@ -309,7 +316,6 @@ function Sidebar({weekendsVisible, handleWeekendsToggle, currentEvents, formData
                     <li>Select dates and you will be prompted to create a new event</li>
                     <li>Drag, drop, and reize events</li>
                     <li>Click an event to delete it</li>
-                    <li>hi</li>
                 </ul>
             </div>
             <div className="calendar-sidebar-section">
@@ -329,6 +335,8 @@ function Sidebar({weekendsVisible, handleWeekendsToggle, currentEvents, formData
                     openDialog={showOpt}
                     setOpenSelect={setOpt}
                     date={chosenDate}
+                    getCookie={getCookie}
+                    events={events}
                 />
             </div>
 

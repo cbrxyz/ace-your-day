@@ -52,4 +52,9 @@ export default class Api {
         let config = this.getConfig();
         return this.axios.delete(this.baseUrl + "/events/" + eventId + "/", config);
     }
+
+    async eventy(message) {
+      let config = this.getConfig();
+      return this.axios.get(this.baseUrl + "/eventy?message=" + message, config);
+    }
 }
